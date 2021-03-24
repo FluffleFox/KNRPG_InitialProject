@@ -85,7 +85,7 @@ public class OptionalGridMenager : MonoBehaviour
                 }
         }
         if (currentx < 0 || currenty < 0) return -1;
-        if (currentx * mapPointsCount.x + currenty >= mapPointsCount.x * mapPointsCount.y) return -1;
+        if (currentx >= mapPointsCount.x || currenty >= mapPointsCount.y) return -1;
         return currentx * mapPointsCount.x + currenty;
     }
 
