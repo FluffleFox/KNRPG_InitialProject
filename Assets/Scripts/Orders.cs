@@ -8,12 +8,14 @@ public class Orders : MonoBehaviour
 
 	[Header("Connections")]
 	public UnitMovement movement;
-
+	public SkillsManager skills;
 	public enum OrderType
 	{
 		move,
 		attack,
-		skill,
+		skill1,
+		skill2,
+		skill3,
 		interact,
 		wait,
 		fortify 
@@ -42,16 +44,39 @@ public class Orders : MonoBehaviour
 		{
 			NewOrder(OrderType.move, new Vector3(transform.position.x, 0f, transform.position.z - 1f));
 		}
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (Input.GetKeyDown(KeyCode.A))
 		{
-			StartCoroutine(ExecuteOrders());
-			
-			Debug.Log(OrdersList.Count);
+			NewOrder(OrderType.move, new Vector3(transform.position.x - 1f, 0f, transform.position.z ));
 		}
+		if (Input.GetKeyDown(KeyCode.D))
+		{
+			NewOrder(OrderType.move, new Vector3(transform.position.x + 1f, 0f, transform.position.z ));
+		}
+		if (Input.GetKeyDown(KeyCode.X))
+		{
+			NewOrder(OrderType.attack, new Vector3(transform.position.x, 0f, transform.position.z));
+		}
+		if (Input.GetKeyDown(KeyCode.J))
+		{
+			NewOrder(OrderType.skill1, new Vector3(transform.position.x, 0f, transform.position.z));
+		}
+		if (Input.GetKeyDown(KeyCode.K))
+		{
+			NewOrder(OrderType.skill2, new Vector3(transform.position.x, 0f, transform.position.z));
+		}
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			NewOrder(OrderType.skill3, new Vector3(transform.position.x, 0f, transform.position.z));
+		}
+
 	}
 	public void NewOrder(OrderType orderType, Vector3 param)
 	{
 		OrdersList.Add(new order(orderType,param));
+	}
+	public void ExecuteOrdersButton()
+	{
+		StartCoroutine(ExecuteOrders());
 	}
 	IEnumerator ExecuteOrders()
 	{
@@ -61,6 +86,18 @@ public class Orders : MonoBehaviour
 			{
 				case OrderType.move:
 					yield return StartCoroutine(movement.Move(x.param));
+					break;
+				case OrderType.attack:
+					yield return StartCoroutine(movement.Attack(x.param));
+					break;
+				case OrderType.skill1:
+					yield return StartCoroutine(skills.PerformSkill1(x.param));
+					break;
+				case OrderType.skill2:
+					yield return StartCoroutine(skills.PerformSkill2(x.param));
+					break;
+				case OrderType.skill3:
+					yield return StartCoroutine(skills.PerformSkill3(x.param));
 					break;
 			}
 		}
