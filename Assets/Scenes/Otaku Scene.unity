@@ -864,6 +864,46 @@ PrefabInstance:
       propertyPath: movement
       value: 
       objectReference: {fileID: 1348385233}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[1].type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[0].param.x
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[0].param.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[1].param.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[1].param.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[2].param.x
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555063261131269129, guid: 64bd15b84de9c8e4594b97848915cd38,
+        type: 3}
+      propertyPath: OrdersList.Array.data[2].param.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8513210061269363457, guid: 64bd15b84de9c8e4594b97848915cd38,
         type: 3}
       propertyPath: m_Name

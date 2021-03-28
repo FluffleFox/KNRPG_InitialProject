@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Orders : MonoBehaviour
 {
-	public List<order> OrdersList;
+	
+	public List<order> OrdersList = new List<order>();
 
 	[Header("Connections")]
 	public UnitMovement movement;
@@ -20,7 +21,8 @@ public class Orders : MonoBehaviour
 		wait,
 		fortify 
 	}
-	public class order
+	[System.Serializable]
+	public struct order
 	{
 		public OrderType type;
 		public Vector3 param;
@@ -29,6 +31,7 @@ public class Orders : MonoBehaviour
 			type = newType;
 			param = newParam;
 		}
+		
 	}
 	private void Start()
 	{
@@ -98,6 +101,9 @@ public class Orders : MonoBehaviour
 					break;
 				case OrderType.skill3:
 					yield return StartCoroutine(skills.PerformSkill3(x.param));
+					break;
+				case OrderType.wait:
+					yield return new WaitForSeconds(3f);
 					break;
 			}
 		}
