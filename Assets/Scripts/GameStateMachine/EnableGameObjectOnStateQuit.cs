@@ -29,5 +29,6 @@ public class EnableGameObjectOnStateQuit : MonoBehaviour
     void EnableGameObject()
     {
         gameObjectToEnable.SetActive(true);
+        Debug.Log("Enabled: " + gameObjectToEnable.name);
     }
 }

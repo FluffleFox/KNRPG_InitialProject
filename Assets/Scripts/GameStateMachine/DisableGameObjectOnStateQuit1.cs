@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DisableGameOBjectOnStateQuit : MonoBehaviour
+public class DisableGameObjectOnStateQuit1 : MonoBehaviour
 {
     public GameStateMachine.GameState state;
     public GameObject gameObjectToDisable;
@@ -29,5 +29,6 @@ public class DisableGameOBjectOnStateQuit : MonoBehaviour
     void DisableGameObject()
     {
         gameObjectToDisable.SetActive(false);
+        Debug.Log("Disabled: " + gameObjectToDisable.name);
     }
 }

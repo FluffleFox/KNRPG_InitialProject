@@ -29,5 +29,6 @@ public class DisableGameObjectOnStateSwitch : MonoBehaviour
     void DisableGameObject()
     {
         gameObjectToDisable.SetActive(false);
+        Debug.Log("Disabled: " + gameObjectToDisable.name);
     }
 }
