@@ -39,8 +39,8 @@ public class SaveGameManager : MonoBehaviour
         string json = JsonUtility.ToJson(placeHolder);
         json = Encryption.Encrypt(json);
         binaryFormatter.Serialize(file, json);
+        Debug.Log("Game saved at: " + file.Name);
         file.Close();
-        Debug.Log("Game Saved");
     }
 
     public void LoadGame()
@@ -55,8 +55,11 @@ public class SaveGameManager : MonoBehaviour
             FileStream file = File.Open(Application.persistentDataPath + "/Saved_Games/SaveGame.json", FileMode.Open);
             //TODO replace placeholder with serializable class
             JsonUtility.FromJsonOverwrite(Encryption.Decrypt((string)binaryFormatter.Deserialize(file)), placeHolder);
+            Debug.Log("Game loaded at: " + file.Name);
+            file.Close();
         }
-        Debug.Log("Game Loaded");
+
+        //Loading Testing
         Debug.Log("Place holder string: " + placeHolder.kappa);
         Debug.Log("Place holder int: " + placeHolder.dupa);
         Debug.Log("Place holder bool: " + placeHolder.xd);

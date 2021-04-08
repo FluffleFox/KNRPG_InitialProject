@@ -412,7 +412,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2
+  m_Text: 'LoadGame
+
+'
 --- !u!222 &444797993
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -993,7 +995,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Button
+  m_Text: SaveGame
 --- !u!222 &1601670291
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1127,6 +1129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c2473c083d43c54881bb60877684a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dupa: 1
+  xd: 1
+  kappa: kappa
 --- !u!114 &1735098660
 MonoBehaviour:
   m_ObjectHideFlags: 0

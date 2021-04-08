@@ -4,7 +4,7 @@ using System.Text;
 
 public static class Encryption
 {
-    private static readonly string hash = "242424242424242424242424";
+    private static readonly string hash = "P0k3Me<E";
 
     public static string Encrypt(string input)
     {
