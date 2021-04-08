@@ -109,11 +109,10 @@ public class OptionalGridMenager : MonoBehaviour
         if (lastPoint != newPoint)
         {
             if (lastPoint != -1)
-            { uvs2[lastPoint] = white; }
+            { mesh.uv4[lastPoint] = white; }
             if (newPoint != -1)
-            { uvs2[newPoint] = red; }
+            { mesh.uv4[newPoint] = red; }
             lastPoint = newPoint;
-            mesh.uv4 = uvs2;
         }
     }
 

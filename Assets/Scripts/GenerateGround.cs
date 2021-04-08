@@ -10,6 +10,7 @@ public class GenerateGround : MonoBehaviour
     public Vector2Int mapPointsCount;
     Mesh mesh;
     public float yScale = 1.0f;
+    public float steps = 3.0f;
     public float a = 1.0f;
     float h;
 
@@ -29,6 +30,7 @@ public class GenerateGround : MonoBehaviour
             Vector2 black = Vector2.zero;
             Vector2 white = Vector2.one;
 
+            steps = Mathf.RoundToInt(steps);
 
             for (int x = 0; x < mapPointsCount.x; x++)
             {
@@ -40,7 +42,7 @@ public class GenerateGround : MonoBehaviour
                     currentPointInUV.y = currentPoint.z / ((float)mapPointsCount.y * a);
                     int coordX = Mathf.RoundToInt(currentPointInUV.x * inputImage.width);
                     int coordY = Mathf.RoundToInt(currentPointInUV.y * inputImage.height);
-                    currentPoint.y = inputImage.GetPixel(coordX, coordY).r * yScale;
+                    currentPoint.y = Mathf.RoundToInt(inputImage.GetPixel(coordX, coordY).r * yScale * steps)/steps;
                     vertex[x * mapPointsCount.y + z] = currentPoint;
                     uvs[x * mapPointsCount.y + z] = currentPointInUV;
                 }
