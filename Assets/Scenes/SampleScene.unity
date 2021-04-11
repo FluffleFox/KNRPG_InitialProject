@@ -152,7 +152,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.9963244, b: 0.94716984, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -211,7 +211,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -1.85, y: 4.95, z: -5.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -341,8 +341,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -404,22 +404,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: feef6cfb1b7bd8e4690d67bc9cece58c,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: feef6cfb1b7bd8e4690d67bc9cece58c,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.4
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: feef6cfb1b7bd8e4690d67bc9cece58c,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: feef6cfb1b7bd8e4690d67bc9cece58c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.745
+      value: -4.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: feef6cfb1b7bd8e4690d67bc9cece58c,
         type: 3}
@@ -470,7 +470,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 9554b09c57fa18148a381fad67346b23, type: 2}
+      objectReference: {fileID: 2100000, guid: 4d6b1ece2f10fa042872b1bd3c410604, type: 2}
     - target: {fileID: 919132149155446097, guid: feef6cfb1b7bd8e4690d67bc9cece58c,
         type: 3}
       propertyPath: m_Name
