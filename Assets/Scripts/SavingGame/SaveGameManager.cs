@@ -1,10 +1,12 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class SaveGameManager : MonoBehaviour
 {
     public static SaveGameManager instance;
+    public string[] SaveSlots = { "auto_save", "save_slot_1", "save_slot_2", "save_slot_3", "save_slot_4", "save_slot_5" };
     public PlaceHolderSaveClass placeHolder;
 
     void Awake()
@@ -18,23 +20,26 @@ public class SaveGameManager : MonoBehaviour
             Destroy(this);
         }
         DontDestroyOnLoad(this);
-        LoadGame();
     }
 
-    public bool IsSaveFile()
+    public bool IsSaveFolder()
     {
         return Directory.Exists(Application.persistentDataPath + "/Saved_Games");
     }
 
 
-    public void SaveGame()
+    public void SaveGame(int index)
     {
-        if (!IsSaveFile())
+        if (!IsSaveFolder())
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/Saved_Games");
         }
+        if (File.Exists(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json"))
+        {
+            //TODO Handle overwriting of savefiles
+        }
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/Saved_Games/SaveGame.json");
+        FileStream file = File.Create(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json");
         //TODO replace placeholder with serializable class
         string json = JsonUtility.ToJson(placeHolder);
         json = Encryption.Encrypt(json);
@@ -43,22 +48,33 @@ public class SaveGameManager : MonoBehaviour
         file.Close();
     }
 
-    public void LoadGame()
+    public void LoadGame(int index)
     {
         if (Directory.Exists(Application.persistentDataPath + "/Saved_Games")) ;
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/Saved_Games");
         }
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        if (File.Exists(Application.persistentDataPath + "/Saved_Games/SaveGame.json"))
+        if (File.Exists(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json"))
         {
-            FileStream file = File.Open(Application.persistentDataPath + "/Saved_Games/SaveGame.json", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json", FileMode.Open);
             //TODO replace placeholder with serializable class
-            JsonUtility.FromJsonOverwrite(Encryption.Decrypt((string)binaryFormatter.Deserialize(file)), placeHolder);
-            Debug.Log("Game loaded at: " + file.Name);
-            file.Close();
+            try
+            {
+                JsonUtility.FromJsonOverwrite(Encryption.Decrypt((string)binaryFormatter.Deserialize(file)), placeHolder);
+                Debug.Log("Game loaded at: " + file.Name);
+                file.Close();
+            }
+            catch(CryptographicException)
+            {
+                //TODO handle cryptography exception
+                file.Close();
+                Debug.Log("File has been corrupted, loading failed the file will be deleted");
+                File.Delete(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json");
+                Debug.Log("File deleted");
+            }
+       
         }
-
         //Loading Testing
         Debug.Log("Place holder string: " + placeHolder.kappa);
         Debug.Log("Place holder int: " + placeHolder.dupa);
