@@ -65,3 +65,4 @@ crashlytics-build.properties
 
 #VSC project files
 .vscode
+.idea/

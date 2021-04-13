@@ -2,11 +2,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SaveGameManager : MonoBehaviour
 {
     public static SaveGameManager instance;
-    public string[] SaveSlots = { "auto_save", "save_slot_1", "save_slot_2", "save_slot_3", "save_slot_4", "save_slot_5" };
+    public string[] saveSlots = { "auto_save", "save_slot_1", "save_slot_2", "save_slot_3", "save_slot_4", "save_slot_5" };
     public PlaceHolderSaveClass placeHolder;
 
     void Awake()
@@ -34,12 +35,12 @@ public class SaveGameManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/Saved_Games");
         }
-        if (File.Exists(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json"))
+        if (File.Exists(Application.persistentDataPath + "/Saved_Games/" + saveSlots[index] + ".json"))
         {
-            //TODO Handle overwriting of savefiles
+            //TODO Handle overwriting of save files
         }
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json");
+        FileStream file = File.Create(Application.persistentDataPath + "/Saved_Games/" + saveSlots[index] + ".json");
         //TODO replace placeholder with serializable class
         string json = JsonUtility.ToJson(placeHolder);
         json = Encryption.Encrypt(json);
@@ -55,9 +56,9 @@ public class SaveGameManager : MonoBehaviour
             Directory.CreateDirectory(Application.persistentDataPath + "/Saved_Games");
         }
         BinaryFormatter binaryFormatter = new BinaryFormatter();
-        if (File.Exists(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json"))
+        if (File.Exists(Application.persistentDataPath + "/Saved_Games/" + saveSlots[index] + ".json"))
         {
-            FileStream file = File.Open(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/Saved_Games/" + saveSlots[index] + ".json", FileMode.Open);
             //TODO replace placeholder with serializable class
             try
             {
@@ -70,7 +71,7 @@ public class SaveGameManager : MonoBehaviour
                 //TODO handle cryptography exception
                 file.Close();
                 Debug.Log("File has been corrupted, loading failed the file will be deleted");
-                File.Delete(Application.persistentDataPath + "/Saved_Games/" + SaveSlots[index] + ".json");
+                File.Delete(Application.persistentDataPath + "/Saved_Games/" + saveSlots[index] + ".json");
                 Debug.Log("File deleted");
             }
        
