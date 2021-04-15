@@ -18,4 +18,14 @@ public class Node : MonoBehaviour
     {
         Debug.Log("X: " + x + " Y: " + y + "Z: " + z);
     }
+
+    private void OnMouseEnter()
+    {
+        GetComponent<Renderer>().material.color *= 1.2f;
+    }
+
+    private void OnMouseExit()
+    {
+        GetComponent<Renderer>().material.color /= 1.2f;
+    }
 }
