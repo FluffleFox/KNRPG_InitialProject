@@ -6,11 +6,11 @@ public class Node : MonoBehaviour
     public readonly struct CubeCoordinates
     {
 
-        public CubeCoordinates(int X, int Y, int Z)
+        public CubeCoordinates(int x, int y, int z)
         {
-            x = X;
-            y = Y;
-            z = Z;
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
         public int x { get; }
         public int y { get; }
@@ -18,9 +18,19 @@ public class Node : MonoBehaviour
         
     };
 
-    public Vector2Int normalCoordinates;
+    public readonly struct NormalCoordinates
+    {
+        public NormalCoordinates(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+        public int x { get; }
+        public int y { get; }
+    }
 
     public bool isOccupied = false;
+    public NormalCoordinates normalCoordinates;
     public CubeCoordinates cubeCoordinates;
 
     private void Start()
@@ -29,12 +39,9 @@ public class Node : MonoBehaviour
         int x = Mathf.FloorToInt(position.x / 0.866f);
         int z = Mathf.FloorToInt(position.z) - (x - (x & 1)) / 2;
         int y = -x - z;
+        normalCoordinates = new NormalCoordinates(x, Mathf.FloorToInt(position.z));
         cubeCoordinates = new CubeCoordinates(x, y, z);
-
-        normalCoordinates = new Vector2Int(x, Mathf.FloorToInt(position.z));
-
     }
-
     private void OnMouseDown()
     {
         //Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
