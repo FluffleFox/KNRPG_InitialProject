@@ -37,7 +37,9 @@ public class Node : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
+        //Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
+        Debug.Log(normalCoordinates);
+
     }
 
     private void OnMouseEnter()
@@ -49,6 +51,7 @@ public class Node : MonoBehaviour
     {
         GetComponent<Renderer>().material.color /= 1.2f;
     }
+
 }
 
 
