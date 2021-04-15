@@ -18,6 +18,8 @@ public class Node : MonoBehaviour
         
     };
 
+    public Vector2Int normalCoordinates;
+
     public bool isOccupied = false;
     public CubeCoordinates cubeCoordinates;
 
@@ -28,6 +30,9 @@ public class Node : MonoBehaviour
         int z = Mathf.FloorToInt(position.z) - (x - (x & 1)) / 2;
         int y = -x - z;
         cubeCoordinates = new CubeCoordinates(x, y, z);
+
+        normalCoordinates = new Vector2Int(x, Mathf.FloorToInt(position.z));
+
     }
 
     private void OnMouseDown()
