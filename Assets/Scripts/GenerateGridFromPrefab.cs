@@ -13,7 +13,7 @@ public class GenerateGridFromPrefab : MonoBehaviour
         float maxY = mapSize.y * offset.y;
         for (int x=0;x<mapSize.x; x++)
         {
-            for (int y = 0; y < mapSize.x; y++)
+            for (int y = 0; y < mapSize.y; y++)
             {
                 float tmpx = (x + (y % 2) * 0.5f) * offset.x;
                 float tmpz = y * offset.y;
