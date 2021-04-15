@@ -1144,13 +1144,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee8fd8f48c0374468b69c0af432b29b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaveSlots:
-  - AutoSave
-  - SaveSlot1
-  - SaveSlot2
-  - SaveSlot3
-  - SaveSlot4
-  - SaveSlot5
+  saveSlots:
+  - auto_save
+  - save_slot_1
+  - save_slot_2
+  - save_slot_3
+  - save_slot_4
+  - save_slot_5
   placeHolder: {fileID: 1735098659}
 --- !u!4 &1735098661
 Transform:
