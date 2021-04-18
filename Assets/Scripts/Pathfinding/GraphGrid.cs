@@ -83,7 +83,7 @@ public class GraphGrid : MonoBehaviour
             if (generateGraphMap)
             {
                 InitGrid();
-                Debug.Log("DEV INFO: Graph map generated :)");
+                Debug.Log("DEV INFO: Graph map is generated :)");
                 generateGraphMap = false;
             }
 
@@ -146,7 +146,7 @@ public class GraphGrid : MonoBehaviour
                 }
                 catch (System.NullReferenceException e)
                 {
-                    Debug.Log("DEV INFO: Graph map IS NOT generated, CLICK ON 'Generate Graph Map' checkbox");
+                    Debug.Log("DEV INFO: Graph map IS NOT generated, CLICK ON 'Generate Graph Map' checkbox OR uncheck 'Draw Graph Edges'");
                 }
             }
         }

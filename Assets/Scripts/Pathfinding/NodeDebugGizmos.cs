@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public class NodeDebugGizmos : MonoBehaviour
@@ -37,7 +39,7 @@ public class NodeDebugGizmos : MonoBehaviour
             }
             catch (System.NullReferenceException e)
             {
-                Debug.Log("No node matrix :(");
+                Debug.Log("DEV INFO: Graph map IS NOT generated, CLICK ON 'Generate Graph Map' on 'GraphGrid.cs'");
             }
         }
     }

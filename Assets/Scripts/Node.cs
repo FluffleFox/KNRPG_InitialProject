@@ -33,6 +33,11 @@ public class Node : MonoBehaviour
     public NormalCoordinates normalCoordinates;
     public CubeCoordinates cubeCoordinates;
 
+    // For Astar path
+    private Node parent = null;
+    public Node Parent { get { return parent; } set { parent = value; } }
+    //
+
     private void Start()
     {
         Vector3 position = transform.position;

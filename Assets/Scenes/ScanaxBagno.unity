@@ -56557,6 +56557,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1297047770}
   - component: {fileID: 1297047768}
+  - component: {fileID: 1297047769}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -56579,8 +56580,23 @@ MonoBehaviour:
   mapObj: {fileID: 1297047767}
   debug: 1
   generateGraphMap: 0
-  drawGraphEdges: 1
+  drawGraphEdges: 0
   sphereRadius: 0.15
+--- !u!114 &1297047769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297047767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98046361606bede4bbac065785ef49df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reset: 0
+  origin: {fileID: 157517020}
+  destination: {fileID: 2078417961}
 --- !u!4 &1297047770
 Transform:
   m_ObjectHideFlags: 0
