@@ -49,8 +49,8 @@ public class Node : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        //Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
-        Debug.Log(normalCoordinates);
+        Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
+        //Debug.Log(normalCoordinates);
 
     }
 
