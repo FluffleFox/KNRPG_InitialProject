@@ -65,4 +65,19 @@ public class NodeManager : MonoBehaviour
         }
         return neighbours;
     }
+
+    private void OnMouseDown()
+    {
+        Debug.Log("XD");
+
+    }
+    private void OnMouseEnter()
+    {
+
+    }
+
+    private void OnMouseExit()
+    {
+
+    }
 }
