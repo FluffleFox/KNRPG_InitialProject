@@ -5,40 +5,37 @@ using UnityEngine;
 
 public class AstarPathfinding : MonoBehaviour
 {
-    // Only for tests in editor //
-    [SerializeField] private bool reset;
-    [SerializeField] private Node origin;
-    [SerializeField] private Node destination;
-    private bool pathFound;
-    // //
+    private static AstarPathfinding instance;
+    public static AstarPathfinding Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new AstarPathfinding();
+            }
+            return instance;
+        }
+    }
 
-    private List<Node> path;
+    [SerializeField] private bool debug;
+    private List<Node> pathDebug;
     private void Start()
     {
-        pathFound = false;
-    }
-    private void Update()
-    {
-        if (origin != null && destination != null && !pathFound)
+        if (instance != null)
         {
-            path = FindPath(origin, destination);
-            pathFound = true;
-
-            if (path == null)
-            {
-                Debug.Log("DEV INFO: There is no possible Astar path");
-            }
+            Destroy(gameObject);
         }
-        if (reset)
+        else
         {
-            reset = false;
-            pathFound = false;
+            instance = this;
         }
     }
 
     // https://github.com/davecusatis/A-Star-Sharp/blob/master/Astar.cs - FindPath method
     public List<Node> FindPath(Node start, Node target)
     {
+        this.pathDebug = null;
         GraphGrid graph = GetComponent<GraphGrid>();
 
         Stack<Node> path = new Stack<Node>();
@@ -87,28 +84,29 @@ public class AstarPathfinding : MonoBehaviour
             path.Push(temp);
             temp = temp.Parent;
         } while (temp != start && temp != null);
+        this.pathDebug = path.ToList();
         return path.ToList();
     }
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        // Only in game mode
-        if (Application.isPlaying && path != null)
+        // Debug only in game mode
+        if (debug && Application.isPlaying && pathDebug != null)
         {
-            if (pathFound && path.Count != 0)
+            if (pathDebug.Count != 0)
             {
                 Gizmos.color = Color.yellow;
                 float sphereRadius = GetComponent<GraphGrid>().SphereRadius;
 
-                Node originNode = path[0];
+                Node originNode = pathDebug[0];
                 Vector3 originPosition = originNode.gameObject.transform.position;
                 originPosition.y += sphereRadius + originNode.transform.GetComponent<MeshRenderer>().bounds.size.y;
                 Gizmos.DrawSphere(originPosition, sphereRadius);
 
-                for (int i = 1; i < path.Count; i++)
+                for (int i = 1; i < pathDebug.Count; i++)
                 {
-                    Node targetNode = path[i];
+                    Node targetNode = pathDebug[i];
                     Vector3 targetPosition = targetNode.gameObject.transform.position;
                     targetPosition.y += sphereRadius + targetNode.transform.GetComponent<MeshRenderer>().bounds.size.y;
                     Gizmos.DrawLine(originPosition, targetPosition);

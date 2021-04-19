@@ -53,13 +53,26 @@ public class GraphGrid : MonoBehaviour
             adjacencyMatrix.Add(row);
         }
     }
-    //public IEnumerator UpdateGrid(float delay)
-    //{
-    //    isDelay = true;
-    //    InitGrid();
-    //    yield return new WaitForSecondsRealtime(delay);
-    //    isDelay = false;
-    //}
+    public Node FindNode(Vector3 position)
+    {
+        foreach (Transform nodeTransform in mapObj.transform)
+        {
+            Node node = nodeTransform.GetComponent<Node>();
+            float reachDistance = node.GetComponent<MeshRenderer>().bounds.size.x / 2;
+            // is point inside of hex
+            if (Mathf.Pow((position.x - node.transform.position.x),2) + Mathf.Pow((position.z - node.transform.position.z),2) <= Mathf.Pow(reachDistance,2))
+            {
+                return node;
+            }
+        }
+        Debug.Log("No node exist");
+        return null;
+    }
+    public void UpdateGrid(Node start, Node target)
+    {
+        start.isOccupied = false;
+        target.isOccupied = true;
+    }
 
     public List<Node> GetNeighbours(int index)
     {
