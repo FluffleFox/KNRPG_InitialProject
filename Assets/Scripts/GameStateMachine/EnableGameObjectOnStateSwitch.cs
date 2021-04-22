@@ -11,8 +11,8 @@ public class EnableGameObjectOnStateSwitch : MonoBehaviour
     {
         switch (state)
         {
-            case GameStateMachine.GameState.MainMenu:
-                GameManager.instance.SwitchingToMainMenu.AddListener(EnableGameObject);
+            case GameStateMachine.GameState.FreeMove:
+                GameManager.instance.SwitchingToFreeMove.AddListener(EnableGameObject);
                 break;
             case GameStateMachine.GameState.Planning:
                 GameManager.instance.SwitchingToPlanning.AddListener(EnableGameObject);

@@ -7,13 +7,13 @@ public class GameManager : MonoBehaviour
 
     public UnityEvent OnStageChnage;
 
-    public UnityEvent SwitchingToMainMenu;
+    public UnityEvent SwitchingToFreeMove;
     public UnityEvent SwitchingToPlanning;
     public UnityEvent SwitchingToFighting;
     public UnityEvent SwitchingToSummary;
 
 
-    public UnityEvent QuittingMainMenu;
+    public UnityEvent QuittingFreeMove;
     public UnityEvent QuittingPlanning;
     public UnityEvent QuittingFighting;
     public UnityEvent QuittingSummary;
@@ -42,9 +42,9 @@ public class GameManager : MonoBehaviour
 
         switch (lastState)
         {
-            case GameStateMachine.GameState.MainMenu:
+            case GameStateMachine.GameState.FreeMove:
                 Debug.Log("Quitting" + lastState);
-                QuittingMainMenu.Invoke();
+                QuittingFreeMove.Invoke();
                 break;
             case GameStateMachine.GameState.Planning:
                 Debug.Log("Quitting" + lastState);
@@ -64,9 +64,9 @@ public class GameManager : MonoBehaviour
 
         switch (state)
         {
-            case GameStateMachine.GameState.MainMenu:
+            case GameStateMachine.GameState.FreeMove:
                 Debug.Log("SwitchingTo" + state);
-                SwitchingToMainMenu.Invoke();
+                SwitchingToFreeMove.Invoke();
                 break;
             case GameStateMachine.GameState.Planning:
                 Debug.Log("SwitchingTo" + state);
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     {
         switch(gameStateMachine.currentState)
         {
-            case GameStateMachine.GameState.MainMenu:
+            case GameStateMachine.GameState.FreeMove:
                 SwitchToGameState(GameStateMachine.GameState.Planning);
                 break;
             case GameStateMachine.GameState.Planning:
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
                 SwitchToGameState(GameStateMachine.GameState.Summary);
                 break;
             case GameStateMachine.GameState.Summary:
-                SwitchToGameState(GameStateMachine.GameState.MainMenu);
+                SwitchToGameState(GameStateMachine.GameState.FreeMove);
                 break;
         }
     }

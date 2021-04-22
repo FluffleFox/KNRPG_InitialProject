@@ -4,7 +4,7 @@ public class GameStateMachine : MonoBehaviour
 {
     public enum GameState
     {
-        MainMenu,
+        FreeMove,
         Planning,
         Fighting,
         Summary,

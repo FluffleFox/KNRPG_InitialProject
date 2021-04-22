@@ -11,8 +11,8 @@ public class DisableGameObjectOnStateSwitch : MonoBehaviour
     {
         switch (state)
         {
-            case GameStateMachine.GameState.MainMenu:
-                GameManager.instance.SwitchingToMainMenu.AddListener(DisableGameObject);
+            case GameStateMachine.GameState.FreeMove:
+                GameManager.instance.SwitchingToFreeMove.AddListener(DisableGameObject);
                 break;
             case GameStateMachine.GameState.Planning:
                 GameManager.instance.SwitchingToPlanning.AddListener(DisableGameObject);
