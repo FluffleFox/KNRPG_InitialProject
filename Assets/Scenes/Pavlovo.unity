@@ -330,7 +330,7 @@ MonoBehaviour:
   OnStageChnage:
     m_PersistentCalls:
       m_Calls: []
-  SwitchingToMainMenu:
+  SwitchingToFreeMove:
     m_PersistentCalls:
       m_Calls: []
   SwitchingToPlanning:
@@ -342,7 +342,7 @@ MonoBehaviour:
   SwitchingToSummary:
     m_PersistentCalls:
       m_Calls: []
-  QuittingMainMenu:
+  QuittingFreeMove:
     m_PersistentCalls:
       m_Calls: []
   QuittingPlanning:
@@ -393,18 +393,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 965858718}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &703051829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 703051825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfde01c4de001d94b872982c22f83a72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &842371288
 GameObject:
   m_ObjectHideFlags: 0
