@@ -38,7 +38,7 @@ public class GraphGrid : MonoBehaviour
             foreach (Transform target in mapObj.transform)
             {
                 Vector2 target2DPosition = new Vector2(target.position.x, target.position.z);
-                float reachDistance = origin.GetComponent<MeshRenderer>().bounds.size.x/2 + target.GetComponent<MeshRenderer>().bounds.size.x / 2;
+                float reachDistance = origin.GetComponent<Node>().ModelWidth/2 + target.GetComponent<Node>().ModelWidth/2;
                 
                 if (Vector2.Distance(origin2DPosition, target2DPosition) <= reachDistance && !target.GetComponent<Node>().isOccupied)
                 {
@@ -74,10 +74,11 @@ public class GraphGrid : MonoBehaviour
         target.isOccupied = true;
     }
 
-    public List<Node> GetNeighbours(int index)
+    public List<Node> GetNeighbours(Node node)
     {
         List<Node> neighboursNodes = new List<Node>();
-        for(int j = 0; j < adjacencyMatrix[index].Count; j++)
+        int index = node.IndexInGrid;
+        for (int j = 0; j < adjacencyMatrix[index].Count; j++)
         {
             bool isPossible = adjacencyMatrix[index][j];
             if (isPossible)
@@ -101,12 +102,12 @@ public class GraphGrid : MonoBehaviour
             }
 
             // Draw vertices
-            foreach (Transform node in mapObj.transform)
+            foreach (Transform nodeTransform in mapObj.transform)
             {
-                Vector3 gizmosPosition = node.position;
-                gizmosPosition.y += sphereRadius + node.GetComponent<MeshRenderer>().bounds.size.y;
+                Vector3 gizmosPosition = nodeTransform.position;
+                gizmosPosition.y += sphereRadius + nodeTransform.GetComponent<Node>().ModelHeight;
 
-                if (!node.GetComponent<Node>().isOccupied)
+                if (!nodeTransform.GetComponent<Node>().isOccupied)
                 {
                     Gizmos.color = Color.green;
                 }
@@ -129,20 +130,20 @@ public class GraphGrid : MonoBehaviour
                         visitedVertices.Add(false);
                     }
 
-                    foreach (Transform node in mapObj.transform)
+                    foreach (Transform nodeTransform in mapObj.transform)
                     {
-                        bool visited = visitedVertices[node.GetSiblingIndex()];
+                        bool visited = visitedVertices[nodeTransform.GetComponent<Node>().IndexInGrid];
                         if (!visited)
                         {
-                            Vector3 originPosition = node.position;
-                            originPosition.y += sphereRadius + node.GetComponent<MeshRenderer>().bounds.size.y;
+                            Vector3 originPosition = nodeTransform.position;
+                            originPosition.y += sphereRadius + nodeTransform.GetComponent<Node>().ModelHeight;
 
-                            var neighbours = GetNeighbours(node.GetSiblingIndex());
+                            var neighbours = GetNeighbours(nodeTransform.GetComponent<Node>());
                             foreach (var neighbour in neighbours)
                             {
                                 Vector3 targetPosition = neighbour.transform.position;
-                                targetPosition.y += sphereRadius + neighbour.GetComponent<MeshRenderer>().bounds.size.y;
-                                if (!neighbour.isOccupied && !node.GetComponent<Node>().isOccupied)
+                                targetPosition.y += sphereRadius + neighbour.GetComponent<Node>().ModelHeight;
+                                if (!neighbour.isOccupied && !nodeTransform.GetComponent<Node>().isOccupied)
                                 {
                                     Gizmos.color = Color.green;
                                 }
@@ -152,8 +153,7 @@ public class GraphGrid : MonoBehaviour
                                 }
                                 Gizmos.DrawLine(originPosition, targetPosition);
                             }
-
-                            visitedVertices[node.GetSiblingIndex()] = true;
+                            visitedVertices[nodeTransform.GetComponent<Node>().IndexInGrid] = true;
                         }
                     }
                 }

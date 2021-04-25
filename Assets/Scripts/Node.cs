@@ -36,6 +36,39 @@ public class Node : MonoBehaviour
     // For Astar path
     private Node parent = null;
     public Node Parent { get { return parent; } set { parent = value; } }
+    private int indexInGrid;
+    public int IndexInGrid 
+    { 
+        get
+        {
+            // in play mode and var is initialized
+            if (Application.isPlaying && indexInGrid != 0) return indexInGrid;
+            // in editor mode
+            else return transform.GetSiblingIndex(); 
+        } 
+    }
+    private float modelHeight;
+    public float ModelHeight 
+    { 
+        get
+        {
+            // in play mode and var is initialized
+            if (Application.isPlaying && modelHeight != 0.0f) return modelHeight;
+            // in editor mode
+            else return GetComponent<MeshRenderer>().bounds.size.y;
+        } 
+    }
+    private float modelWidth;
+    public float ModelWidth
+    {
+        get
+        {
+            // in play mode and var is initialized
+            if (Application.isPlaying && modelWidth != 0.0f) return modelWidth;
+            // in editor mode
+            else return GetComponent<MeshRenderer>().bounds.size.x;
+        }
+    }
     //
 
     private void Start()
@@ -46,11 +79,15 @@ public class Node : MonoBehaviour
         int y = -x - z;
         normalCoordinates = new NormalCoordinates(x, Mathf.FloorToInt(position.z));
         cubeCoordinates = new CubeCoordinates(x, y, z);
+
+        indexInGrid = transform.GetSiblingIndex();
+        modelHeight = GetComponent<MeshRenderer>().bounds.size.y;
+        modelWidth  = GetComponent<MeshRenderer>().bounds.size.x;
     }
     private void OnMouseDown()
     {
         Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
-        //Debug.Log(normalCoordinates);
+        Debug.Log("NORM COORDS: " + normalCoordinates.x + " " + normalCoordinates.y);
 
     }
 

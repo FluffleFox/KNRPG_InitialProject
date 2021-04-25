@@ -52,7 +52,7 @@ public class AstarPathfinding : MonoBehaviour
             current = openList[0];
             openList.Remove(current);
             closedList.Add(current);
-            adjacencies = graph.GetNeighbours(current.transform.GetSiblingIndex());
+            adjacencies = graph.GetNeighbours(current);
 
             foreach (Node n in adjacencies)
             {
@@ -101,19 +101,19 @@ public class AstarPathfinding : MonoBehaviour
 
                 Node originNode = pathDebug[0];
                 Vector3 originPosition = originNode.gameObject.transform.position;
-                originPosition.y += sphereRadius + originNode.transform.GetComponent<MeshRenderer>().bounds.size.y;
+                originPosition.y += sphereRadius + originNode.ModelHeight;
                 Gizmos.DrawSphere(originPosition, sphereRadius);
 
                 for (int i = 1; i < pathDebug.Count; i++)
                 {
                     Node targetNode = pathDebug[i];
                     Vector3 targetPosition = targetNode.gameObject.transform.position;
-                    targetPosition.y += sphereRadius + targetNode.transform.GetComponent<MeshRenderer>().bounds.size.y;
+                    targetPosition.y += sphereRadius + targetNode.ModelHeight;
                     Gizmos.DrawLine(originPosition, targetPosition);
 
                     originNode = targetNode;
                     originPosition = originNode.gameObject.transform.position;
-                    originPosition.y += sphereRadius + originNode.transform.GetComponent<MeshRenderer>().bounds.size.y;
+                    originPosition.y += sphereRadius + originNode.ModelHeight;
                 }
                 Gizmos.DrawSphere(originPosition, sphereRadius);
             }

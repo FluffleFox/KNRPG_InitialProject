@@ -27,7 +27,7 @@ public class NodeDebugGizmos : MonoBehaviour
             }
             try
             {
-                var neighbours = transform.parent.GetComponent<GraphGrid>().GetNeighbours(transform.GetSiblingIndex());
+                var neighbours = transform.parent.GetComponent<GraphGrid>().GetNeighbours(GetComponent<Node>());
                 foreach (var node in neighbours)
                 {
                     Vector3 targetPosition = node.transform.position;
