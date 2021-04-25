@@ -14,8 +14,8 @@ public class GraphGrid : MonoBehaviour
     [SerializeField] private float sphereRadius;
     public float SphereRadius { get { return sphereRadius; } }
 
-    private List<List<bool>> adjacencyMatrix;
-    public List<List<bool>> AdjacencyMatrix 
+    private List<List<int>> adjacencyMatrix;
+    public List<List<int>> AdjacencyMatrix 
     { 
         get 
         {
@@ -29,28 +29,34 @@ public class GraphGrid : MonoBehaviour
     }
     public void InitGrid()
     {
-        adjacencyMatrix = new List<List<bool>>();
-        // Iterate all nodes and make Adjacency matrix
+        adjacencyMatrix = new List<List<int>>();
+        // Iterate all nodes and make Adjacency Matrix (int - index of neighbouring vertex)
         foreach (Transform origin in mapObj.transform)
         {
-            List<bool> row = new List<bool>();
+            List<int> adjacencyList = new List<int>();
             Vector2 origin2DPosition = new Vector2(origin.position.x, origin.position.z);
             foreach (Transform target in mapObj.transform)
             {
                 Vector2 target2DPosition = new Vector2(target.position.x, target.position.z);
-                float reachDistance = origin.GetComponent<Node>().ModelWidth/2 + target.GetComponent<Node>().ModelWidth/2;
+                float reachDistance = origin.GetComponent<Node>().ModelWidth / 2 + target.GetComponent<Node>().ModelWidth / 2;
                 
                 if (Vector2.Distance(origin2DPosition, target2DPosition) <= reachDistance && !target.GetComponent<Node>().isOccupied)
                 {
-                    row.Add(true);
-                }
-                else
-                {
-                    row.Add(false);
+                    adjacencyList.Add(target.GetComponent<Node>().IndexInGrid);
                 }
             }
             // Add adjacency list to matrix
-            adjacencyMatrix.Add(row);
+            adjacencyMatrix.Add(adjacencyList);
+        }
+
+        foreach (var i in adjacencyMatrix)
+        {
+            string line = "";
+            foreach (var j in i)
+            {
+                line += j.ToString() + " ";
+            }
+            Debug.Log(line);
         }
     }
     public Node FindNode(Vector3 position)
@@ -58,7 +64,7 @@ public class GraphGrid : MonoBehaviour
         foreach (Transform nodeTransform in mapObj.transform)
         {
             Node node = nodeTransform.GetComponent<Node>();
-            float reachDistance = node.GetComponent<MeshRenderer>().bounds.size.x / 2;
+            float reachDistance = node.ModelWidth / 2;
             // is point inside of hex
             if (Mathf.Pow((position.x - node.transform.position.x),2) + Mathf.Pow((position.z - node.transform.position.z),2) <= Mathf.Pow(reachDistance,2))
             {
@@ -80,11 +86,7 @@ public class GraphGrid : MonoBehaviour
         int index = node.IndexInGrid;
         for (int j = 0; j < adjacencyMatrix[index].Count; j++)
         {
-            bool isPossible = adjacencyMatrix[index][j];
-            if (isPossible)
-            {
-                neighboursNodes.Add(transform.GetChild(j).GetComponent<Node>());
-            }
+            neighboursNodes.Add(transform.GetChild(adjacencyMatrix[index][j]).GetComponent<Node>());
         }
         return neighboursNodes;
     }
