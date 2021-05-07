@@ -10,6 +10,9 @@ public class Orders : MonoBehaviour
 	[Header("Connections")]
 	public UnitMovement movement;
 	public SkillsManager skills;
+	public GraphGrid grid;
+
+	private Node currentNode;
 	public enum OrderType
 	{
 		move,
@@ -37,41 +40,52 @@ public class Orders : MonoBehaviour
 	{
 		OrdersList = new List<order>();
 	}
-	private void Update()
+	public void ShowOrders()
 	{
-		if(Input.GetKeyDown(KeyCode.W))
+		foreach (order x in OrdersList)
 		{
-			NewOrder(OrderType.move, new Vector3(transform.position.x, 0f, transform.position.z + 1f));
+			switch (x.type)
+			{
+				case OrderType.move:
+					ShowMove(x.param);
+					break;
+				case OrderType.attack:
+					
+					break;
+				case OrderType.skill1:
+					
+					break;
+				case OrderType.skill2:
+					
+					break;
+				case OrderType.skill3:
+					
+					break;
+				case OrderType.wait:
+					
+					break;
+			}
 		}
-		if (Input.GetKeyDown(KeyCode.S))
+	}
+	void ShowMove(Vector3 target)
+	{
+		List<Node> path = MakePath(target);
+		foreach(Node node in path)
 		{
-			NewOrder(OrderType.move, new Vector3(transform.position.x, 0f, transform.position.z - 1f));
+			node.GetComponent<Renderer>().material.color /= 2f;
 		}
-		if (Input.GetKeyDown(KeyCode.A))
+	}
+	List<Node> MakePath(Vector3 target)
+	{
+		currentNode = grid.FindNode(transform.position);
+		Node startNode = currentNode;
+		Node targetNode = grid.FindNode(target);
+		List<Node> path = new List<Node>();
+		if (currentNode != null && targetNode != null)
 		{
-			NewOrder(OrderType.move, new Vector3(transform.position.x - 1f, 0f, transform.position.z ));
+			path = AstarPathfinding.Instance.FindPath(startNode, targetNode);
 		}
-		if (Input.GetKeyDown(KeyCode.D))
-		{
-			NewOrder(OrderType.move, new Vector3(transform.position.x + 1f, 0f, transform.position.z ));
-		}
-		if (Input.GetKeyDown(KeyCode.X))
-		{
-			NewOrder(OrderType.attack, new Vector3(transform.position.x, 0f, transform.position.z));
-		}
-		if (Input.GetKeyDown(KeyCode.J))
-		{
-			NewOrder(OrderType.skill1, new Vector3(transform.position.x, 0f, transform.position.z));
-		}
-		if (Input.GetKeyDown(KeyCode.K))
-		{
-			NewOrder(OrderType.skill2, new Vector3(transform.position.x, 0f, transform.position.z));
-		}
-		if (Input.GetKeyDown(KeyCode.L))
-		{
-			NewOrder(OrderType.skill3, new Vector3(transform.position.x, 0f, transform.position.z));
-		}
-
+		return path;
 	}
 	public void NewOrder(OrderType orderType, Vector3 param)
 	{
@@ -88,7 +102,7 @@ public class Orders : MonoBehaviour
 			switch(x.type)
 			{
 				case OrderType.move:
-					yield return StartCoroutine(movement.Move(x.param));
+					yield return StartCoroutine(movement.Move(MakePath(x.param)));
 					break;
 				case OrderType.attack:
 					yield return StartCoroutine(movement.Attack(x.param));
@@ -109,4 +123,5 @@ public class Orders : MonoBehaviour
 		}
 		OrdersList = new List<order>();
 	}
+	
 }
