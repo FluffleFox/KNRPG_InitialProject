@@ -2264,6 +2264,7 @@ GameObject:
   - component: {fileID: 2715399929194329414}
   - component: {fileID: 5555063261131269129}
   - component: {fileID: 3632719823228424779}
+  - component: {fileID: 1929204366967845600}
   m_Layer: 0
   m_Name: Janna
   m_TagString: Player
@@ -2335,6 +2336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
+  grid: {fileID: 0}
   moveTime: 0.5
 --- !u!114 &5555063261131269129
 MonoBehaviour:
@@ -2348,6 +2350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64f0abbbbce57614b8a893885eb8c36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OrdersList: []
   movement: {fileID: 2715399929194329414}
   skills: {fileID: 3632719823228424779}
 --- !u!114 &3632719823228424779
@@ -2365,6 +2368,18 @@ MonoBehaviour:
   Skill1: Heal
   Skill2: Fireball
   Skill3: Thunder
+--- !u!114 &1929204366967845600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8513210061269363457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4998fb7adb6c39f42b052684ba187d6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8543913825736599490
 GameObject:
   m_ObjectHideFlags: 0
