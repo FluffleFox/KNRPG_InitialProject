@@ -101,6 +101,22 @@ public class Node : MonoBehaviour
         GetComponent<Renderer>().material.color /= 1.2f;
     }
 
+    public bool IsPlayerOnNode()
+    {
+        RaycastHit hit;
+
+        Vector3 upVector = new Vector3(transform.position.x, transform.position.y + 5.0f, transform.position.z);
+        if (Physics.Raycast(transform.position, upVector, out hit, Mathf.Infinity, LayerMask.GetMask("Player")))
+        {
+            Debug.DrawLine(transform.position, upVector, Color.green);
+            return true;
+        }
+        else
+        {
+            Debug.DrawLine(transform.position, upVector, Color.red);
+            return false;
+        }
+    }
 }
 
 

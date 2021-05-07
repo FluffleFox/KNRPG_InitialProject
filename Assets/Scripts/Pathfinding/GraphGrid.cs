@@ -49,15 +49,7 @@ public class GraphGrid : MonoBehaviour
             adjacencyMatrix.Add(adjacencyList);
         }
 
-        foreach (var i in adjacencyMatrix)
-        {
-            string line = "";
-            foreach (var j in i)
-            {
-                line += j.ToString() + " ";
-            }
-            Debug.Log(line);
-        }
+      
     }
     public Node FindNode(Vector3 position)
     {
