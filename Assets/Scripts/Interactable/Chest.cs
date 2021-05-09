@@ -14,9 +14,21 @@ public class Chest : InteractableUnit
         base.Update();
     }
 
+    protected override void DisplayUI()
+    {
+        base.DisplayUI();
+    }
+
+    protected override void HideUI()
+    {
+        base.HideUI();
+    }
+
     protected override void Interact()
     {
         base.Interact();
+        Debug.Log("Child");
+        Destroy(gameObject);
     }
 
     protected override void OnDrawGizmosSelected()

@@ -1,19 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractableUnit : MonoBehaviour
 {
     [SerializeField] protected GraphGrid grid;
     [SerializeField] protected ItemData itemData;
+    [SerializeField] protected ItemUIData itemUIData;
+    [SerializeField] protected GameObject itemUIPrefab;
+    [SerializeField] protected Vector3 UIOffset;
     protected Node currentNode;
     protected List<Node> rangeNodes;
     protected bool inRange;
 
+    private GameObject itemUI;
+    private bool isUIinitialized;
 
     protected virtual void Awake()
     {
         inRange = false;
+        isUIinitialized = false;
         currentNode = grid.FindNode(transform.position);
         StartCoroutine(InitRangeNodes());
     }
@@ -53,6 +61,15 @@ public class InteractableUnit : MonoBehaviour
         {
             inRange = IsPlayerInRange();
         }
+
+        if (inRange && itemUIData)
+        {
+            DisplayUI();
+        }
+        else
+        {
+            HideUI();
+        }
     }
 
     public virtual bool IsPlayerInRange()
@@ -67,9 +84,69 @@ public class InteractableUnit : MonoBehaviour
         return false;
     }
 
+    protected void InitUI(GameObject UIelement)
+    {
+        ItemUIPlaceHolder placeHolder = UIelement.GetComponent<ItemUIPlaceHolder>();
+        foreach (ItemUIPlaceHolder.UIComponent childUI in placeHolder.Components)
+        {
+            switch (childUI.type)
+            {
+                case ItemUIPlaceHolder.UIType.TITLE:
+                    childUI.component.GetComponent<TextMeshProUGUI>().text = itemUIData.Title;
+                    childUI.component.GetComponent<TextMeshProUGUI>().color = itemUIData.TextColor;
+                    break;
+                case ItemUIPlaceHolder.UIType.IMAGE:
+                    childUI.component.GetComponent<Image>().sprite = itemUIData.ItemImage;
+                    break;
+                case ItemUIPlaceHolder.UIType.DESCRIPTION:
+                    childUI.component.GetComponent<TextMeshProUGUI>().text = itemUIData.Description;
+                    childUI.component.GetComponent<TextMeshProUGUI>().color = itemUIData.TextColor;
+                    break;
+                case ItemUIPlaceHolder.UIType.BACKGROUND:
+                    childUI.component.GetComponent<Image>().color = itemUIData.BackgroundColor;
+                    break;
+                case ItemUIPlaceHolder.UIType.BUTTON:
+                    childUI.component.GetComponent<Image>().color = itemUIData.ButtonColor;
+                    childUI.component.GetComponent<Button>().onClick.AddListener(Interact);
+                    break;
+                case ItemUIPlaceHolder.UIType.BUTTONTEXT:
+                    childUI.component.GetComponent<TextMeshProUGUI>().text = itemUIData.ButtonText;
+                    childUI.component.GetComponent<TextMeshProUGUI>().color = itemUIData.ButtonTextColor;
+                    break;
+            }
+        }
+        itemUI.transform.parent = this.transform;
+        isUIinitialized = true;
+    }
+
+    protected virtual void DisplayUI()
+    {
+        if (!isUIinitialized)
+        {
+            itemUI = Instantiate(itemUIPrefab, transform.position + UIOffset, Quaternion.identity);
+            InitUI(itemUI);
+        }
+        if (itemUI)
+        {
+            itemUI.active = true;
+        }
+    }
+    protected virtual void HideUI()
+    {
+        if (!isUIinitialized)
+        {
+            itemUI = Instantiate(itemUIPrefab, transform.position + UIOffset, Quaternion.identity);
+            InitUI(itemUI);
+        }
+        if (itemUI)
+        {
+            itemUI.active = false;
+        }
+    }
+
     protected virtual void Interact()
     {
-
+        Debug.Log("Base !");
     } 
 
 #if UNITY_EDITOR

@@ -56659,7 +56659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapObj: {fileID: 1297047767}
   debug: 0
-  generateGraphMap: 1
+  generateGraphMap: 0
   drawGraphEdges: 0
   sphereRadius: 0.15
 --- !u!114 &1297047769
@@ -99065,6 +99065,21 @@ PrefabInstance:
       propertyPath: grid
       value: 
       objectReference: {fileID: 1297047768}
+    - target: {fileID: 5084658901166542893, guid: c51bb18691a55f946b0a90e7f1052def,
+        type: 3}
+      propertyPath: UIOffset.x
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084658901166542893, guid: c51bb18691a55f946b0a90e7f1052def,
+        type: 3}
+      propertyPath: UIOffset.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084658901166542893, guid: c51bb18691a55f946b0a90e7f1052def,
+        type: 3}
+      propertyPath: UIOffset.z
+      value: 2.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5355131273453458435, guid: c51bb18691a55f946b0a90e7f1052def,
         type: 3}
       propertyPath: m_Name
@@ -99117,6 +99132,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LootableUIPlaceHolder
+      objectReference: {fileID: 0}
+    - target: {fileID: 2071895344487812951, guid: 6b8da6d832fc99a46b26de902a156c42,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5576902235635069370, guid: 6b8da6d832fc99a46b26de902a156c42,
         type: 3}
