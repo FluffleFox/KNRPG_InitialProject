@@ -3,24 +3,27 @@ using UnityEngine;
 public class UnitStats : MonoBehaviour
 {
     [SerializeField] private Stat stats;
+    [SerializeField] private Stat.UnitTypes classType;
     public uint health;
     public uint armor;
     public uint strength;
     public uint agility;
     public uint intelligence;
-    void Start()
+    private void Start()
     {
-        gameObject.name = stats.unit_name;
-        health = stats.unit_maxhealth;
-        armor = stats.unit_armor;
-        strength = stats.unit_strength;
-        agility = stats.unit_agility;
-        intelligence = stats.unit_intelligence;
+        classType = stats.unitType;
+        gameObject.name = stats.unitName;
+        health = stats.unitMaxHealth;
+        armor = stats.unitArmor;
+        strength = stats.unitStrength;
+        agility = stats.unitAgility;
+        intelligence = stats.unitIntelligence;
         //TODO 
         //load abilities on start
         Debug.Log
         (
-            "My stats are: " +
+            "My class is: " + classType +
+            " My stats are: " +
                   " name: " + gameObject.name +
                   " max health: " + health +
                   " armor: " + armor + 

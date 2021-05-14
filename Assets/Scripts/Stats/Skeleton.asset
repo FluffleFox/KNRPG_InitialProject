@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8752fa208b146f64e8a7f09e2fef4e14, type: 3}
   m_Name: Skeleton
   m_EditorClassIdentifier: 
-  unit_name: Skeleton
-  unit_health: 100
-  unit_strength: 2
-  unit_agility: 1
-  unit_intelligence: 0
-  unit_luck: 100
-  unit_abilities: []
+  unitType: 1
+  unitName: Skeleton
+  unitArmor: 1
+  unitMaxHealth: 1
+  unitStrength: 2
+  unitAgility: 3
+  unitIntelligence: 4
+  unitAbilities: []

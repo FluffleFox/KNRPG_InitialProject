@@ -3,12 +3,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UnitStats", menuName = "ScriptableObjects/UnitStats", order = 2)]
 public class Stat : ScriptableObject
 {
-    public string unit_name;
-    public uint unit_armor;
-    public uint unit_maxhealth;
-    public uint unit_strength;
-    public uint unit_agility;
-    public uint unit_intelligence;
+    public enum UnitTypes
+    {
+        Warrior,
+        Mage,
+        Hunter
+    }
+    public UnitTypes unitType;
+    public string unitName;
+    public uint unitArmor;
+    public uint unitMaxHealth;
+    public uint unitStrength;
+    public uint unitAgility;
+    public uint unitIntelligence;
 
-    public string[] unit_abilities;
+    public string[] unitAbilities;
 }
