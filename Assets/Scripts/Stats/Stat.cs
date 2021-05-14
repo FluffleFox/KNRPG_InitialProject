@@ -4,12 +4,11 @@ using UnityEngine;
 public class Stat : ScriptableObject
 {
     public string unit_name;
-    public uint unit_health;
+    public uint unit_armor;
+    public uint unit_maxhealth;
     public uint unit_strength;
     public uint unit_agility;
     public uint unit_intelligence;
-    //I guess?
-    public uint unit_luck;
 
     public string[] unit_abilities;
 }
