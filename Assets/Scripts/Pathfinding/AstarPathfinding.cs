@@ -20,6 +20,10 @@ public class AstarPathfinding : MonoBehaviour
 
     [SerializeField] private bool debug;
     private List<Node> pathDebug;
+    [SerializeField] private GraphGrid graph;
+    public GraphGrid Graph { set { graph = value; } }
+
+
     private void Start()
     {
         if (instance != null)
@@ -36,7 +40,6 @@ public class AstarPathfinding : MonoBehaviour
     public List<Node> FindPath(Node start, Node target)
     {
         this.pathDebug = null;
-        GraphGrid graph = GetComponent<GraphGrid>();
 
         Stack<Node> path = new Stack<Node>();
         List<Node> openList = new List<Node>();
