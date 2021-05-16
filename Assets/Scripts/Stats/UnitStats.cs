@@ -32,4 +32,9 @@ public class UnitStats : MonoBehaviour
                   " intelligence: " + intelligence
         );
     }
+
+    public void UpdateStats()
+    {
+        // Update statistics?
+    }
 }

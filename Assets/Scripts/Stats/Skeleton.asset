@@ -15,7 +15,7 @@ MonoBehaviour:
   unitType: 1
   unitName: Skeleton
   unitArmor: 1
-  unitMaxHealth: 1
+  unitMaxHealth: 50
   unitStrength: 2
   unitAgility: 3
   unitIntelligence: 4
