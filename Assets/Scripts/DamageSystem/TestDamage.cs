@@ -1,13 +1,13 @@
 ﻿using System;
 using UnityEngine;
+public class TestDamage : MonoBehaviour
 
-namespace DamageSystem
-{
-    public class TestDamage : MonoBehaviour
     {
-        private void Start()
+        public Ability fireball;
+        public GameObject goToDamage;
+        public void TestBasicDamage()
         {
-            gameObject.GetComponent<EntityDamage>().Damage(20);
+            goToDamage.GetComponent<EntityDamage>().Damage(fireball.damage);
+            Debug.Log("Damage dealt");
         }
     }
-}

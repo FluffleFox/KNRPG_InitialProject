@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 public class EntityDamage : MonoBehaviour, IDamageable
     {
-        IDamageable damageable;
+        private IDamageable damageable;
      
-        void Start()
+        private void Start()
         {
             damageable = (IDamageable)GetComponent(typeof(IDamageable));
             if (damageable == null)
