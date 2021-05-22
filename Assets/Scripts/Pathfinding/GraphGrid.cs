@@ -83,6 +83,22 @@ public class GraphGrid : MonoBehaviour
         return neighboursNodes;
     }
 
+    // Return even occupied nodes
+    public List<Node> GetAllNeighbours(Node node)
+    {
+        List<Node> neighboursNodes = new List<Node>();
+        float radius = node.ModelWidth * Mathf.Sqrt(3) / 2;
+        foreach (Collider neighbourCollider in Physics.OverlapSphere(node.transform.position, radius))
+        {
+            if (neighbourCollider.GetComponent<Node>())
+            {
+                neighboursNodes.Add(neighbourCollider.GetComponent<Node>());
+            }
+        }
+
+        return neighboursNodes;
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {

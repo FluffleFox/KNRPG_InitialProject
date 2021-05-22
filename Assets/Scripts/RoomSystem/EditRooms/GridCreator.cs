@@ -4,24 +4,56 @@ using System.Linq;
 using UnityEngine;
 
 #if UNITY_EDITOR
+[ExecuteInEditMode]
 public class GridCreator : MonoBehaviour
 {
     public enum CreatorMode
     {
         DEFAULT,
         ADD,
-        REMOVE
+        REMOVE,
+        ADDOBJ
     }
-
+    [SerializeField] private Room roomToEdit;
+    public Room RoomToEdit { get { return roomToEdit; } }
     [SerializeField] private GraphGrid grid;
     public GraphGrid Grid { get { return grid; } }
     [SerializeField] private GameObject hexGhostPrefab;
     private CreatorMode mode = CreatorMode.DEFAULT;
     public CreatorMode Mode { get { return mode; } }
     private List<GameObject> hexGhosts;
-    private GameObject currentNode;
-    private GameObject selectedGhost;
+    private GameObject currentNode;   // mouse hover on hex
+    private GameObject selectedGhost; // mouse hover on green hex
     private Vector3 mousePos;
+
+    // Objects tab
+    private EditorPrefabsScriptable.PrefabRoomEditorType roomEditorPrefab;
+    public EditorPrefabsScriptable.PrefabRoomEditorType RoomEditorType { get { return roomEditorPrefab; } set { roomEditorPrefab = value; } }
+    private EditorPrefabsScriptable selectedScriptable;
+    public EditorPrefabsScriptable SelectedScriptable { get { return selectedScriptable; } set { selectedScriptable = value; } }
+    private GameObject selectedPrefab;
+    public GameObject SelectedPrefab { get { return selectedPrefab; } set { selectedPrefab = value; } }
+    [HideInInspector] public EditorPrefabsScriptable[] editorScriptables;
+    // Clockwise direction
+    public enum RotationType
+    {
+        ROTATION_0,
+        ROTATION_30,
+        ROTATION_60,
+        ROTATION_90,
+        ROTATION_120,
+        ROTATION_150,
+        ROTATION_180,
+        ROTATION_210,
+        ROTATION_240,
+        ROTATION_270,
+        ROTATION_300,
+        ROTATION_330,
+    }
+    private RotationType rotation;
+    public RotationType Rotation { get { return rotation; } set { rotation = value; } }
+    private GameObject possibleCollision;
+    
 
     public void SetMode(CreatorMode newMode)
     {
@@ -29,8 +61,9 @@ public class GridCreator : MonoBehaviour
         hexGhosts = new List<GameObject>();
         // update grid
         grid.InitGrid();
-		mode = newMode;
+        mode = newMode;
     }
+
     public void ClearGhosts()
     {
         if (hexGhosts != null && hexGhosts.Count != 0)
@@ -52,7 +85,7 @@ public class GridCreator : MonoBehaviour
         if (grid.AdjacencyMatrix == null)
         {
             Debug.Log("Generowany jest grid");
-			grid.InitGrid();
+            grid.InitGrid();
         }
 
         // Set color
@@ -67,6 +100,9 @@ public class GridCreator : MonoBehaviour
             case (CreatorMode.REMOVE):
                 Gizmos.color = Color.red;
                 break;
+            case (CreatorMode.ADDOBJ):
+                Gizmos.color = Color.blue;
+                break;
         }
 
         // Show selected node
@@ -79,7 +115,7 @@ public class GridCreator : MonoBehaviour
             }
             currentNode = nodeObject;
             Node node = nodeObject.GetComponent<Node>();
-            Gizmos.DrawCube(new Vector3(node.transform.position.x, node.transform.position.y+node.ModelHeight+0.25f, node.transform.position.z),Vector3.one/5);
+            Gizmos.DrawCube(new Vector3(node.transform.position.x, node.transform.position.y + node.ModelHeight + 0.25f, node.transform.position.z), Vector3.one / 5);
         }
 
         // Actions
@@ -92,22 +128,38 @@ public class GridCreator : MonoBehaviour
                 {
                     InitGhosts();
                 }
-                else if(hexGhosts != null && hexGhosts.Count != 0)
+                else if (hexGhosts != null && hexGhosts.Count != 0)
                 {
                     selectedGhost = GetMouseOverlap(typeof(NodeGhost));
                 }
                 break;
             case (CreatorMode.REMOVE):
-                
+                break;
+            case (CreatorMode.ADDOBJ):
+                // Draw blue line depending on rotation angle
+                float radius = currentNode.GetComponent<Node>().ModelWidth / 2;
+                Vector3 nodePos = currentNode.transform.position;
+                float height = currentNode.GetComponent<Node>().ModelHeight + 0.25f;
+                float angle = (int)rotation * 30 * Mathf.PI / 180;
+                Vector3 startPoint = new Vector3(nodePos.x + Mathf.Cos(angle) * radius, nodePos.y + height, nodePos.z - Mathf.Sin(angle) * radius);
+                Vector3 endPoint = new Vector3(nodePos.x - Mathf.Cos(angle) * radius, nodePos.y + height, nodePos.z + Mathf.Sin(angle) * radius);
+                Gizmos.DrawLine(startPoint, endPoint);
+                //
+
+                possibleCollision = GetMouseOverlap(typeof(MeshFilter));
                 break;
         }
     }
+
     private void InitGhosts()
     {
-        List<Node> nodeNeighbours = grid.GetNeighbours(currentNode.GetComponent<Node>());
+        List<Node> nodeNeighbours = grid.GetAllNeighbours(currentNode.GetComponent<Node>());
         List<bool> isNodeExists = Enumerable.Repeat(false, 6).ToList();
+
+        //  Depending on clockwise direction find sides with hex
         foreach (Node node in nodeNeighbours)
         {
+            // TODO rework to model width istead of values
             if (node.transform.position.x - currentNode.transform.position.x == 0.0f
                 && node.transform.position.z - currentNode.transform.position.z == -1.0f)
             {
@@ -139,6 +191,7 @@ public class GridCreator : MonoBehaviour
                 isNodeExists[5] = true;
             }
         }
+        // Highlight (green hex ghost) sides without hex  
         for (int i = 0; i < isNodeExists.Count; i++)
         {
             if (!isNodeExists[i])
@@ -208,7 +261,33 @@ public class GridCreator : MonoBehaviour
             grid.InitGrid();
         }
     }
-	// Detect cursor coords
+    public void SpawnObject()
+    {
+        if (currentNode)
+        {
+            Vector3 spawnPosition = currentNode.transform.position + selectedScriptable.InstanitiateOffset;
+            spawnPosition.y += currentNode.GetComponent<Node>().ModelHeight + 0.15f;
+
+            if (possibleCollision)
+            {
+                if (possibleCollision.transform.position == spawnPosition)
+                {
+                    Debug.Log("Can't Add, the same object is already placed");
+                    return;
+                }
+            }
+            if (selectedScriptable.IsNodeOccupied)
+            {
+                currentNode.GetComponent<Node>().isOccupied = true;
+            }
+
+            Quaternion objectRotation = Quaternion.identity;
+            objectRotation.eulerAngles = new Vector3(objectRotation.eulerAngles.x, (int)rotation * 30, objectRotation.eulerAngles.z);
+            GameObject newObject = Instantiate(selectedPrefab, spawnPosition, objectRotation);
+            newObject.transform.parent = roomToEdit.GetComponent<Room>().Objects.gameObject.transform;
+        }
+    }
+	// Detect cursor overlap GameObject
 	private GameObject GetMouseOverlap(System.Type comp)
     {
         Ray ray = UnityEditor.HandleUtility.GUIPointToWorldRay(mousePos);
@@ -225,5 +304,6 @@ public class GridCreator : MonoBehaviour
         }
         return null;
     }
+
 }
 #endif

@@ -13,16 +13,19 @@ public class Room : MonoBehaviour
     public RoomType Type { get { return type; } }
     [SerializeField] protected GraphGrid grid;
     public GraphGrid Grid { get { return grid; } }
+    [SerializeField] protected GameObject objects;
+    public GameObject Objects { get { return objects; } }
 
 
-    protected void Awake()
+    protected void Start()
     {
-        InitRoom();
+        DeInitRoom();
     }
 
     protected void InitRoom()
     {
         grid.gameObject.active = true;
+        grid.InitGrid();
         AstarPathfinding.Instance.Graph = grid;
     }
 

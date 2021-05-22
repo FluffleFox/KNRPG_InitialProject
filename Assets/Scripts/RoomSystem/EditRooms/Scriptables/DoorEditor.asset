@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be91c2083e122024faa0526bddd972f4, type: 3}
+  m_Name: DoorEditor
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1953542732616192, guid: 59a48361f10411544a42ef1d147d45ad, type: 3}
+  type: 0
+  isNodeOccupied: 1
+  instanitiateOffset: {x: 0.4, y: -0.1, z: 0}
