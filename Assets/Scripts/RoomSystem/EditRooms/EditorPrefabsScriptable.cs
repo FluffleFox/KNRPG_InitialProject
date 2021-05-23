@@ -8,7 +8,8 @@ public class EditorPrefabsScriptable : ScriptableObject
     public enum PrefabRoomEditorType
     {
         DOOR,
-        WALL
+        WALL,
+        ENEMY
     }
 
 
@@ -21,16 +22,17 @@ public class EditorPrefabsScriptable : ScriptableObject
     [SerializeField] private Vector3 instanitiateOffset;
     public Vector3 InstanitiateOffset { get { return instanitiateOffset; } }
 
-    public static EditorPrefabsScriptable FindObjectByType(EditorPrefabsScriptable.PrefabRoomEditorType type, EditorPrefabsScriptable[] prefabs)
+    public static EditorPrefabsScriptable[] FindPrefabsByType(EditorPrefabsScriptable.PrefabRoomEditorType type, EditorPrefabsScriptable[] prefabs)
     {
+        List<EditorPrefabsScriptable> coresspondingPrefabs = new List<EditorPrefabsScriptable>();
         foreach (EditorPrefabsScriptable prefab in prefabs)
         {
             if (prefab.Type == type)
             {
-                return prefab;
+                coresspondingPrefabs.Add(prefab);
             }
         }
-        return null;
+        return coresspondingPrefabs.ToArray();
     }
 }
 

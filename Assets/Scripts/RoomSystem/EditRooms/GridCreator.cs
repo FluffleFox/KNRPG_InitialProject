@@ -34,7 +34,6 @@ public class GridCreator : MonoBehaviour
     private GameObject selectedPrefab;
     public GameObject SelectedPrefab { get { return selectedPrefab; } set { selectedPrefab = value; } }
     [HideInInspector] public EditorPrefabsScriptable[] editorScriptables;
-    // Clockwise direction
     public enum RotationType
     {
         ROTATION_0,
@@ -284,7 +283,18 @@ public class GridCreator : MonoBehaviour
             Quaternion objectRotation = Quaternion.identity;
             objectRotation.eulerAngles = new Vector3(objectRotation.eulerAngles.x, (int)rotation * 30, objectRotation.eulerAngles.z);
             GameObject newObject = Instantiate(selectedPrefab, spawnPosition, objectRotation);
-            newObject.transform.parent = roomToEdit.GetComponent<Room>().Objects.gameObject.transform;
+            if (selectedScriptable.Type == EditorPrefabsScriptable.PrefabRoomEditorType.DOOR)
+            {
+                newObject.transform.parent = roomToEdit.GetComponent<Room>().Doors.gameObject.transform;
+            }
+            else if (selectedScriptable.Type == EditorPrefabsScriptable.PrefabRoomEditorType.ENEMY)
+            {
+                newObject.transform.parent = roomToEdit.GetComponent<Room>().Enemies.gameObject.transform;
+            }
+            else
+            {
+                newObject.transform.parent = roomToEdit.GetComponent<Room>().Environment.gameObject.transform;
+            }
         }
     }
 	// Detect cursor overlap GameObject

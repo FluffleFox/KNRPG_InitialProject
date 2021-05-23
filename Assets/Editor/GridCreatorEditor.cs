@@ -14,6 +14,10 @@ public class GridCreatorEditor : Editor
     private bool addObjFromPrefabToggled = false;
     private bool addObjFromPrefabChecked = false;
 
+    private int oldPrefabChoice;
+    private int prefabChoice;
+
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -138,13 +142,20 @@ public class GridCreatorEditor : Editor
             var stylePrefLabel = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
             stylePrefLabel.fontStyle = FontStyle.Bold;
             EditorGUILayout.LabelField("SELECT ROOM PREFAB", stylePrefLabel);
-            creator.RoomEditorType = (EditorPrefabsScriptable.PrefabRoomEditorType)EditorGUILayout.EnumPopup("Room prefab", creator.RoomEditorType);
+            creator.RoomEditorType = (EditorPrefabsScriptable.PrefabRoomEditorType)EditorGUILayout.EnumPopup("Room prefab type", creator.RoomEditorType);
+            // select room prefab
+            List<string> prefabNames = new List<string>();
+            foreach (EditorPrefabsScriptable scriptable in EditorPrefabsScriptable.FindPrefabsByType(creator.RoomEditorType, creator.editorScriptables))
+            {
+                prefabNames.Add(scriptable.name);
+            }
+            prefabChoice = EditorGUILayout.Popup(prefabChoice, prefabNames.ToArray());
+
             creator.Rotation = (GridCreator.RotationType)EditorGUILayout.EnumPopup("Rotation", creator.Rotation);
             GUI.enabled = false;
             creator.SelectedPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Selected Prefab", "Add object to fracture"), creator.SelectedPrefab, typeof(GameObject), false);
             GUI.enabled = true;
-            
-            //creator.SelectedPrefab = creator.Hex;
+
             SerializedObject so = new SerializedObject(target);
             SerializedProperty stringsProperty = so.FindProperty("editorScriptables");
 
@@ -160,15 +171,25 @@ public class GridCreatorEditor : Editor
                 creator.SelectedPrefab = creator.SelectedScriptable.Prefab;
             }
         }
-        else if (creator.editorScriptables.Length != 0 && creator.SelectedScriptable.Type != creator.RoomEditorType)
+        // Change room prefab type
+        else if (creator.editorScriptables.Length != 0 && (creator.SelectedScriptable.Type != creator.RoomEditorType))
         {
-            creator.SelectedScriptable = EditorPrefabsScriptable.FindObjectByType(creator.RoomEditorType, creator.editorScriptables);
+            prefabChoice = 0;
+            creator.SelectedScriptable = EditorPrefabsScriptable.FindPrefabsByType(creator.RoomEditorType, creator.editorScriptables)[prefabChoice];
             if (creator.SelectedScriptable)
             {
                 creator.SelectedPrefab = creator.SelectedScriptable.Prefab;
             }
         }
-
-
+        // Change room prefab
+        else if (creator.editorScriptables.Length != 0 && oldPrefabChoice != prefabChoice)
+        {
+            oldPrefabChoice = prefabChoice;
+            creator.SelectedScriptable = EditorPrefabsScriptable.FindPrefabsByType(creator.RoomEditorType, creator.editorScriptables)[prefabChoice];
+            if (creator.SelectedScriptable)
+            {
+                creator.SelectedPrefab = creator.SelectedScriptable.Prefab;
+            }
+        }
     }
 }

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be91c2083e122024faa0526bddd972f4, type: 3}
+  m_Name: Enemy1Editor
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8513210061269363457, guid: 64bd15b84de9c8e4594b97848915cd38, type: 3}
+  type: 2
+  isNodeOccupied: 1
+  instanitiateOffset: {x: 0, y: 0, z: 0}
