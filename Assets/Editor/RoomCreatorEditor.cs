@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(GridCreator))]
-public class GridCreatorEditor : Editor
+[CustomEditor(typeof(RoomCreator))]
+public class RoomCreatorEditor : Editor
 {
-    private GridCreator creator;
+    private RoomCreator creator;
     private bool addButtonToggled = false;
     private bool removeButtonToggled = false;
     private bool addChecked = false;
@@ -21,7 +21,7 @@ public class GridCreatorEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        creator = (GridCreator)target;
+        creator = (RoomCreator)target;
 
         var styleIntrolabel = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
         EditorGUILayout.LabelField("To interact with grid press SPACE, in case of ADD nodes use DOUBLE SPACE ", styleIntrolabel);
@@ -37,7 +37,7 @@ public class GridCreatorEditor : Editor
             addChecked = false;
             removeChecked = false;
             addObjFromPrefabChecked = false;
-            creator.SetMode(GridCreator.CreatorMode.DEFAULT);
+            creator.SetMode(RoomCreator.RoomCreatorMode.DEFAULT);
         }
 
         addButtonToggled = GUILayout.Toggle(addButtonToggled, "ADD hex mode", "Button");
@@ -51,14 +51,14 @@ public class GridCreatorEditor : Editor
             addObjFromPrefabChecked = false;
             Debug.Log("ADD mode ON !");
 
-            creator.SetMode(GridCreator.CreatorMode.ADD);
+            creator.SetMode(RoomCreator.RoomCreatorMode.ADD);
         }
         else if (!addButtonToggled && addChecked)
         {
             addChecked = false;
             Debug.Log("Default mode !");
 
-            creator.SetMode(GridCreator.CreatorMode.DEFAULT);
+            creator.SetMode(RoomCreator.RoomCreatorMode.DEFAULT);
         }
 
         GUI.backgroundColor = Color.red;
@@ -74,14 +74,14 @@ public class GridCreatorEditor : Editor
             addObjFromPrefabChecked = false;
             Debug.Log("REMOVE mode ON !");
 
-            creator.SetMode(GridCreator.CreatorMode.REMOVE);
+            creator.SetMode(RoomCreator.RoomCreatorMode.REMOVE);
         }
         else if (!removeButtonToggled && removeChecked)
         {
             removeChecked = false;
             Debug.Log("Default mode !");
 
-            creator.SetMode(GridCreator.CreatorMode.DEFAULT);
+            creator.SetMode(RoomCreator.RoomCreatorMode.DEFAULT);
         }
         GUILayout.EndHorizontal();
 
@@ -98,14 +98,14 @@ public class GridCreatorEditor : Editor
             addChecked = false;
             Debug.Log("ADD OBJ from prefab mode ON !");
 
-            creator.SetMode(GridCreator.CreatorMode.ADDOBJ);
+            creator.SetMode(RoomCreator.RoomCreatorMode.ADDOBJ);
         }
         else if (!addObjFromPrefabToggled && addObjFromPrefabChecked)
         {
             addObjFromPrefabChecked = false;
             Debug.Log("Default mode !");
 
-            creator.SetMode(GridCreator.CreatorMode.DEFAULT);
+            creator.SetMode(RoomCreator.RoomCreatorMode.DEFAULT);
         }        
 
         GUI.backgroundColor = defaultGUIColor;
@@ -119,15 +119,15 @@ public class GridCreatorEditor : Editor
                 if (e.keyCode == KeyCode.Space)
                 {
                     // Actions
-                    if (creator.Mode == GridCreator.CreatorMode.ADD)
+                    if (creator.Mode == RoomCreator.RoomCreatorMode.ADD)
                     {
                         creator.InteractWithGhosts();
                     }
-                    else if (creator.Mode == GridCreator.CreatorMode.REMOVE)
+                    else if (creator.Mode == RoomCreator.RoomCreatorMode.REMOVE)
                     {
                         creator.DeleteNode();
                     }
-                    else if (creator.Mode == GridCreator.CreatorMode.ADDOBJ)
+                    else if (creator.Mode == RoomCreator.RoomCreatorMode.ADDOBJ)
                     {
                         creator.SpawnObject();
                     }
@@ -137,7 +137,7 @@ public class GridCreatorEditor : Editor
         }
 
         // Add drop menu in Add prefab mode
-        if (creator.Mode == GridCreator.CreatorMode.ADDOBJ)
+        if (creator.Mode == RoomCreator.RoomCreatorMode.ADDOBJ)
         {
             var stylePrefLabel = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter };
             stylePrefLabel.fontStyle = FontStyle.Bold;
@@ -151,7 +151,7 @@ public class GridCreatorEditor : Editor
             }
             prefabChoice = EditorGUILayout.Popup(prefabChoice, prefabNames.ToArray());
 
-            creator.Rotation = (GridCreator.RotationType)EditorGUILayout.EnumPopup("Rotation", creator.Rotation);
+            creator.Rotation = (RoomCreator.RotationType)EditorGUILayout.EnumPopup("Rotation", creator.Rotation);
             GUI.enabled = false;
             creator.SelectedPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Selected Prefab", "Add object to fracture"), creator.SelectedPrefab, typeof(GameObject), false);
             GUI.enabled = true;

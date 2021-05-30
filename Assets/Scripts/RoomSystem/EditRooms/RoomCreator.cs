@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 #if UNITY_EDITOR
 [ExecuteInEditMode]
-public class GridCreator : MonoBehaviour
+public class RoomCreator : MonoBehaviour
 {
-    public enum CreatorMode
+    public enum RoomCreatorMode
     {
         DEFAULT,
         ADD,
@@ -19,8 +22,8 @@ public class GridCreator : MonoBehaviour
     [SerializeField] private GraphGrid grid;
     public GraphGrid Grid { get { return grid; } }
     [SerializeField] private GameObject hexGhostPrefab;
-    private CreatorMode mode = CreatorMode.DEFAULT;
-    public CreatorMode Mode { get { return mode; } }
+    private RoomCreatorMode mode = RoomCreatorMode.DEFAULT;
+    public RoomCreatorMode Mode { get { return mode; } }
     private List<GameObject> hexGhosts;
     private GameObject currentNode;   // mouse hover on hex
     private GameObject selectedGhost; // mouse hover on green hex
@@ -54,7 +57,7 @@ public class GridCreator : MonoBehaviour
     private GameObject possibleCollision;
     
 
-    public void SetMode(CreatorMode newMode)
+    public void SetMode(RoomCreatorMode newMode)
     {
         ClearGhosts();
         hexGhosts = new List<GameObject>();
@@ -80,73 +83,76 @@ public class GridCreator : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        mousePos = Event.current.mousePosition;
-        if (grid.AdjacencyMatrix == null)
+        if (Selection.activeTransform == transform)
         {
-            Debug.Log("Generowany jest grid");
-            grid.InitGrid();
-        }
-
-        // Set color
-        switch (mode)
-        {
-            case (CreatorMode.DEFAULT):
-                Gizmos.color = Color.gray;
-                break;
-            case (CreatorMode.ADD):
-                Gizmos.color = Color.green;
-                break;
-            case (CreatorMode.REMOVE):
-                Gizmos.color = Color.red;
-                break;
-            case (CreatorMode.ADDOBJ):
-                Gizmos.color = Color.blue;
-                break;
-        }
-
-        // Show selected node
-        GameObject nodeObject = GetMouseOverlap(typeof(Node));
-        if (nodeObject && currentNode != nodeObject)
-        {
-            if (mode == CreatorMode.ADD)
+            mousePos = Event.current.mousePosition;
+            if (grid.AdjacencyMatrix == null)
             {
-                ClearGhosts();
+                Debug.Log("Generowany jest grid");
+                grid.InitGrid();
             }
-            currentNode = nodeObject;
-            Node node = nodeObject.GetComponent<Node>();
-            Gizmos.DrawCube(new Vector3(node.transform.position.x, node.transform.position.y + node.ModelHeight + 0.25f, node.transform.position.z), Vector3.one / 5);
-        }
 
-        // Actions
-        switch (mode)
-        {
-            case (CreatorMode.DEFAULT):
-                break;
-            case (CreatorMode.ADD):
-                if (hexGhosts != null && hexGhosts.Count == 0 && currentNode) // init ghosts
-                {
-                    InitGhosts();
-                }
-                else if (hexGhosts != null && hexGhosts.Count != 0)
-                {
-                    selectedGhost = GetMouseOverlap(typeof(NodeGhost));
-                }
-                break;
-            case (CreatorMode.REMOVE):
-                break;
-            case (CreatorMode.ADDOBJ):
-                // Draw blue line depending on rotation angle
-                float radius = currentNode.GetComponent<Node>().ModelWidth / 2;
-                Vector3 nodePos = currentNode.transform.position;
-                float height = currentNode.GetComponent<Node>().ModelHeight + 0.25f;
-                float angle = (int)rotation * 30 * Mathf.PI / 180;
-                Vector3 startPoint = new Vector3(nodePos.x + Mathf.Cos(angle) * radius, nodePos.y + height, nodePos.z - Mathf.Sin(angle) * radius);
-                Vector3 endPoint = new Vector3(nodePos.x - Mathf.Cos(angle) * radius, nodePos.y + height, nodePos.z + Mathf.Sin(angle) * radius);
-                Gizmos.DrawLine(startPoint, endPoint);
-                //
+            // Set color
+            switch (mode)
+            {
+                case (RoomCreatorMode.DEFAULT):
+                    Gizmos.color = Color.gray;
+                    break;
+                case (RoomCreatorMode.ADD):
+                    Gizmos.color = Color.green;
+                    break;
+                case (RoomCreatorMode.REMOVE):
+                    Gizmos.color = Color.red;
+                    break;
+                case (RoomCreatorMode.ADDOBJ):
+                    Gizmos.color = Color.blue;
+                    break;
+            }
 
-                possibleCollision = GetMouseOverlap(typeof(MeshFilter));
-                break;
+            // Show selected node
+            GameObject nodeObject = GetMouseOverlap(typeof(Node));
+            if (nodeObject && currentNode != nodeObject)
+            {
+                if (mode == RoomCreatorMode.ADD)
+                {
+                    ClearGhosts();
+                }
+                currentNode = nodeObject;
+                Node node = nodeObject.GetComponent<Node>();
+                Gizmos.DrawCube(new Vector3(node.transform.position.x, node.transform.position.y + node.ModelHeight + 0.25f, node.transform.position.z), Vector3.one / 5);
+            }
+
+            // Actions
+            switch (mode)
+            {
+                case (RoomCreatorMode.DEFAULT):
+                    break;
+                case (RoomCreatorMode.ADD):
+                    if (hexGhosts != null && hexGhosts.Count == 0 && currentNode) // init ghosts
+                    {
+                        InitGhosts();
+                    }
+                    else if (hexGhosts != null && hexGhosts.Count != 0)
+                    {
+                        selectedGhost = GetMouseOverlap(typeof(NodeGhost));
+                    }
+                    break;
+                case (RoomCreatorMode.REMOVE):
+                    break;
+                case (RoomCreatorMode.ADDOBJ):
+                    // Draw blue line depending on rotation angle
+                    float radius = currentNode.GetComponent<Node>().ModelWidth / 2;
+                    Vector3 nodePos = currentNode.transform.position;
+                    float height = currentNode.GetComponent<Node>().ModelHeight + 0.25f;
+                    float angle = (int)rotation * 30 * Mathf.PI / 180;
+                    Vector3 startPoint = new Vector3(nodePos.x + Mathf.Cos(angle) * radius, nodePos.y + height, nodePos.z - Mathf.Sin(angle) * radius);
+                    Vector3 endPoint = new Vector3(nodePos.x - Mathf.Cos(angle) * radius, nodePos.y + height, nodePos.z + Mathf.Sin(angle) * radius);
+                    Gizmos.DrawLine(startPoint, endPoint);
+                    //
+
+                    possibleCollision = GetMouseOverlap(typeof(MeshFilter));
+                    break;
+            }
         }
     }
 
@@ -282,14 +288,20 @@ public class GridCreator : MonoBehaviour
 
             Quaternion objectRotation = Quaternion.identity;
             objectRotation.eulerAngles = new Vector3(objectRotation.eulerAngles.x, (int)rotation * 30, objectRotation.eulerAngles.z);
-            GameObject newObject = Instantiate(selectedPrefab, spawnPosition, objectRotation);
+            GameObject newObject = PrefabUtility.InstantiatePrefab(selectedPrefab) as GameObject; // spawn prefab not clone
+            newObject.transform.position = spawnPosition;
+            newObject.transform.rotation = objectRotation;
+
             if (selectedScriptable.Type == EditorPrefabsScriptable.PrefabRoomEditorType.DOOR)
             {
-                newObject.transform.parent = roomToEdit.GetComponent<Room>().Doors.gameObject.transform;
+                newObject.name = System.String.Format("{0} ({1})", newObject.name, roomToEdit.GetComponent<Room>().DoorsObj.transform.childCount+1);
+                newObject.transform.parent = roomToEdit.GetComponent<Room>().DoorsObj.gameObject.transform;
+                newObject.GetComponent<Door>().OnNode = currentNode.GetComponent<Node>();
+                newObject.GetComponent<Door>().Room1 = transform.parent.GetComponent<Room>();
             }
             else if (selectedScriptable.Type == EditorPrefabsScriptable.PrefabRoomEditorType.ENEMY)
             {
-                newObject.transform.parent = roomToEdit.GetComponent<Room>().Enemies.gameObject.transform;
+                newObject.transform.parent = roomToEdit.GetComponent<Room>().EnemiesObj.gameObject.transform;
             }
             else
             {

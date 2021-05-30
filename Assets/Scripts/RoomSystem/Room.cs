@@ -22,9 +22,10 @@ public class Room : MonoBehaviour
     [SerializeField] protected GraphGrid grid;
     public GraphGrid Grid { get { return grid; } }
     [SerializeField] protected GameObject doors;
-    public GameObject Doors { get { return doors; } }
+    public GameObject DoorsObj { get { return doors; } }
+    public Door[] Doors { get { return doors.GetComponentsInChildren<Door>(); } }
     [SerializeField] protected GameObject enemies;
-    public GameObject Enemies { get { return enemies; } }
+    public GameObject EnemiesObj { get { return enemies; } }
 
     [SerializeField] protected GameObject environment;
     public GameObject Environment { get { return environment; } }
@@ -97,11 +98,17 @@ public class Room : MonoBehaviour
 
     public void UnlockDoors()
     {
-
+        foreach (Door door in DoorsObj.GetComponentsInChildren<Door>())
+        {
+            door.IsLocked = false;
+        }
     }
 
     public void LockDoors()
     {
-
+        foreach (Door door in DoorsObj.GetComponentsInChildren<Door>())
+        {
+            door.IsLocked = true;
+        }
     }
 }

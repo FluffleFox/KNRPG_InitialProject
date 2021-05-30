@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be91c2083e122024faa0526bddd972f4, type: 3}
   m_Name: DoorEditor
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1953542732616192, guid: 59a48361f10411544a42ef1d147d45ad, type: 3}
+  prefab: {fileID: 1953542732616192, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
   type: 0
   isNodeOccupied: 1
   instanitiateOffset: {x: 0.4, y: -0.1, z: 0}
