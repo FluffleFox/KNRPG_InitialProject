@@ -15,13 +15,17 @@ public class DungeonCreator : MonoBehaviour
     public DungeonCreatorMode Mode { get { return mode; } }
     private Vector3 mousePos;
     private GameObject mouseHoverDoor;
+    private Door lastMouseHoverDoor;
+    public Door LastMouseHoverDoor { get { return lastMouseHoverDoor; } }
     [HideInInspector] public GameObject[] RoomPrefabs;
     private GameObject selectedRoomPrefab;
     public GameObject SelectedRoomPrefab { get { return selectedRoomPrefab; } set { selectedRoomPrefab = value; } }
     private GameObject selectedRoomDoor;
     private string oldSelectedRoomDoorName;
+    public string OldSelectedRoomDoorName { get { return oldSelectedRoomDoorName; } set { oldSelectedRoomDoorName = value; } }
     public GameObject SelectedRoomDoor { get { return selectedRoomDoor; } set { selectedRoomDoor = value; } }
     private GameObject ghostRoom;
+    public GameObject GhostRoom { get { return ghostRoom; } }
 
 
     public void SetMode(DungeonCreatorMode newMode)
@@ -46,11 +50,11 @@ public class DungeonCreator : MonoBehaviour
         DestroyImmediate(ghostRoom);
     }
 
-    public void InitGhostRoom()
+    public void InitGhostRoom(Door hoverDoor)
     {
         // Set objects for current room doors
-        Door mouseHoverDoorFixed = mouseHoverDoor.GetComponent<Door>();
-        Room currentRoom = mouseHoverDoor.GetComponentInParent<Room>();
+        Door mouseHoverDoorFixed = hoverDoor.GetComponent<Door>();
+        Room currentRoom = hoverDoor.GetComponentInParent<Room>();
         currentRoom.Grid.InitGrid();
         foreach (Door door in currentRoom.Doors)
         {
@@ -63,14 +67,14 @@ public class DungeonCreator : MonoBehaviour
         }
 
         // Set proper position
-        Vector3 hoverDoorPosition = mouseHoverDoor.transform.position;
+        Vector3 hoverDoorPosition = hoverDoor.transform.position;
 
-        Quaternion rotation = mouseHoverDoor.transform.GetComponentInParent<Room>().transform.rotation;
-        ghostRoom = Instantiate(selectedRoomPrefab, mouseHoverDoor.transform.GetComponentInParent<Room>().transform.position, rotation);
+        Quaternion rotation = hoverDoor.transform.GetComponentInParent<Room>().transform.rotation;
+        ghostRoom = Instantiate(selectedRoomPrefab, hoverDoor.transform.GetComponentInParent<Room>().transform.position, rotation);
         // rotate to door identity
-        ghostRoom.transform.Rotate(Vector3.up, mouseHoverDoor.transform.eulerAngles.y - selectedRoomDoor.transform.eulerAngles.y);
+        ghostRoom.transform.Rotate(Vector3.up, hoverDoor.transform.eulerAngles.y - selectedRoomDoor.transform.eulerAngles.y);
         // rotate around door
-        ghostRoom.transform.RotateAround(mouseHoverDoor.GetComponent<Door>().OnNode.transform.position, Vector3.up, 180f);
+        ghostRoom.transform.RotateAround(hoverDoor.GetComponent<Door>().OnNode.transform.position, Vector3.up, 180f);
 
         // Set objects for ghost room doors
         Door ghostRoomPrefabDoor = selectedRoomDoor.GetComponent<Door>();
@@ -91,9 +95,8 @@ public class DungeonCreator : MonoBehaviour
                                      mouseHoverDoorFixed.GetComponent<Door>().OnNode.transform.position.z - ghostRoomPrefabDoor.GetComponent<Door>().OnNode.transform.position.z);
         ghostRoom.transform.position += offset;
 
-        //ghostRoom.transform.parent = mouseHoverDoor.transform.GetComponentInParent<Room>().transform.parent;
         ghostRoom.name = System.String.Format("{0} ({1})", ghostRoom.name, transform.childCount + 1);
-        
+
     }
 
     // Detect cursor overlap GameObject
@@ -128,11 +131,21 @@ public class DungeonCreator : MonoBehaviour
                 Gizmos.color = Color.red;
                 break;
         }
+        bool newDoorHovered = false;
         mouseHoverDoor = GetMouseOverlap(typeof(Door));
         if (mouseHoverDoor)
         {
             Gizmos.DrawCube(mouseHoverDoor.GetComponent<Door>().SocketPoint.transform.position, new Vector3(0.5f, 0.5f, 0.5f));
-            Debug.Log(mouseHoverDoor);
+            if (lastMouseHoverDoor == null && mouseHoverDoor.GetComponentInParent<Room>().gameObject != ghostRoom)
+            {
+                lastMouseHoverDoor = mouseHoverDoor.GetComponent<Door>();
+                newDoorHovered = true;
+            }
+            else if (mouseHoverDoor != lastMouseHoverDoor.gameObject && mouseHoverDoor.GetComponentInParent<Room>().gameObject != ghostRoom)
+            {
+                lastMouseHoverDoor = mouseHoverDoor.GetComponent<Door>();
+                newDoorHovered = true;
+            }
         }
 
         // Actions
@@ -141,11 +154,21 @@ public class DungeonCreator : MonoBehaviour
             case DungeonCreatorMode.DEFAULT:
                 break;
             case DungeonCreatorMode.ADD:
+                // Spawn ghost if mouse hovered door
                 if (!ghostRoom && mouseHoverDoor && selectedRoomDoor && selectedRoomPrefab)
                 {
                     oldSelectedRoomDoorName = selectedRoomDoor.name;
-                    InitGhostRoom();
+                    InitGhostRoom(lastMouseHoverDoor);
                 }
+
+                if (ghostRoom && newDoorHovered && lastMouseHoverDoor && selectedRoomDoor && selectedRoomPrefab)
+                {
+                    oldSelectedRoomDoorName = selectedRoomDoor.name;
+                    RemoveGhostRoom();
+                    InitGhostRoom(lastMouseHoverDoor);
+                }
+
+                //
                 break;
             case DungeonCreatorMode.REMOVE:
                 break;

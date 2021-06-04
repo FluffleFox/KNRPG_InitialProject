@@ -134,7 +134,6 @@ public class DungeonCreatorEditor : Editor
             if (creator.SelectedRoomPrefab == null && creator.RoomPrefabs.Length != 0)
             {
                 creator.SelectedRoomPrefab = creator.RoomPrefabs[prefabChoice];
-                prefabChoice = 0;
             }
 
             else if (creator.SelectedRoomPrefab != creator.RoomPrefabs[prefabChoice])
@@ -150,7 +149,19 @@ public class DungeonCreatorEditor : Editor
 
             else if (creator.SelectedRoomDoor != creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice])
             {
-                creator.SelectedRoomDoor = creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice].gameObject;
+                try
+                {
+                    creator.SelectedRoomDoor = creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice].gameObject;
+                }
+                catch (System.IndexOutOfRangeException ex) { }
+            }
+
+            // ReinitRoom if selected door is changed, change door in inspector -> affects on room ghost
+            if (creator.GhostRoom && creator.LastMouseHoverDoor && creator.OldSelectedRoomDoorName != creator.SelectedRoomDoor.name)
+            {
+                creator.OldSelectedRoomDoorName = creator.SelectedRoomDoor.name;
+                creator.RemoveGhostRoom();
+                creator.InitGhostRoom(creator.LastMouseHoverDoor);
             }
         }
     }
