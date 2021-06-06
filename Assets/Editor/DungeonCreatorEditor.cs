@@ -60,7 +60,7 @@ public class DungeonCreatorEditor : Editor
         GUI.backgroundColor = defaultGUIColor;
         GUILayout.EndHorizontal();
 
-        // Get is SPACE down
+        // Handle input (! input key - SPACE !)
         Event e = Event.current;
         int controlID = GUIUtility.GetControlID(FocusType.Passive);
         switch (e.GetTypeForControl(controlID))
@@ -71,11 +71,11 @@ public class DungeonCreatorEditor : Editor
                     // Actions
                     if (creator.Mode == DungeonCreator.DungeonCreatorMode.ADD)
                     {
-                        //creator.SpawnRoom();
+                        creator.SpawnRoom();
                     }
                     else if (creator.Mode == DungeonCreator.DungeonCreatorMode.REMOVE)
                     {
-                        //creator.DeleteNode();
+                        creator.DeleteRoom();
                     }
                 }
                 break;
@@ -142,19 +142,20 @@ public class DungeonCreatorEditor : Editor
             }
 
             // Switch Door
-            if (creator.SelectedRoomDoor == null && creator.SelectedRoomPrefab.GetComponent<Room>().Doors.Length != 0)
+            try
             {
-                creator.SelectedRoomDoor = creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice].gameObject;
-            }
-
-            else if (creator.SelectedRoomDoor != creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice])
-            {
-                try
+                if (creator.SelectedRoomDoor == null && creator.SelectedRoomPrefab.GetComponent<Room>().Doors.Length != 0)
                 {
                     creator.SelectedRoomDoor = creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice].gameObject;
                 }
-                catch (System.IndexOutOfRangeException ex) { }
+
+                else if (creator.SelectedRoomDoor != creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice])
+                {
+                    creator.SelectedRoomDoor = creator.SelectedRoomPrefab.GetComponent<Room>().Doors[doorChoice].gameObject;
+                }
             }
+
+            catch (System.IndexOutOfRangeException ex) { }
 
             // ReinitRoom if selected door is changed, change door in inspector -> affects on room ghost
             if (creator.GhostRoom && creator.LastMouseHoverDoor && creator.OldSelectedRoomDoorName != creator.SelectedRoomDoor.name)

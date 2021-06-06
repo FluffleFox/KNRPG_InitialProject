@@ -14,6 +14,7 @@ public class Room : MonoBehaviour
     public RoomState State { get { return state; } }
     public enum RoomType
     {
+        STARTROOM,
         COMMONROOM,
         BOSSROOM
     }
@@ -35,7 +36,10 @@ public class Room : MonoBehaviour
 
     protected void Start()
     {
-        DeInitRoom();
+        if (type != RoomType.STARTROOM)
+        {
+            DeInitRoom();
+        }
     }
 
     protected void SetState(RoomState newState)
@@ -109,6 +113,15 @@ public class Room : MonoBehaviour
         foreach (Door door in DoorsObj.GetComponentsInChildren<Door>())
         {
             door.IsLocked = true;
+        }
+    }
+
+    public void SetReferencesForDoors()
+    {
+        grid.InitGrid();
+        foreach (Door door in Doors)
+        {
+            door.SetReferences();
         }
     }
 }

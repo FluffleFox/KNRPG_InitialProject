@@ -13934,7 +13934,7 @@ GameObject:
   - component: {fileID: 9028311279691540735}
   - component: {fileID: 9028311279691540733}
   m_Layer: 0
-  m_Name: Room3
+  m_Name: Room4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13970,7 +13970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b386e17fc8f52469545286680b9764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   grid: {fileID: 9028311279438181713}
   doors: {fileID: 9028311279899475678}
   enemies: {fileID: 9028311280228994264}
@@ -19081,7 +19081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.45
+      value: -1.068
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19136,7 +19136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.407
+      value: 0.049
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19215,7 +19215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.65
+      value: -0.96
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19270,7 +19270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.42
+      value: -0.044
       objectReference: {fileID: 0}
     - target: {fileID: 4816586640823452, guid: 1c530b2e68e7d3b498ca964fb9c09990, type: 3}
       propertyPath: m_LocalPosition.y

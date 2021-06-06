@@ -8,20 +8,24 @@ public class Door : MonoBehaviour
     public bool IsLocked { get { return isLocked; } set { isLocked = value; } }
     [SerializeField] protected GameObject socketPoint;
     public GameObject SocketPoint { get { return socketPoint; } }
-    protected Door doorReference; // need to connect rooms
-    public Door DoorReference { set { doorReference = value; } get { return doorReference; } }
     protected Room room1;
-    public Room Room1 { set { room1 = value; } }
+    public Room Room1 { get { return room1; } set { room1 = value; } }
     protected Room room2;
-    public Room Room2 { set { room2 = value; } }
+    public Room Room2 { get { return room2; } set { room2 = value; } }
     private Node onNode;
     public Node OnNode { get { return onNode; } set { onNode = value; } }
 
 
     private void Start()
     {
-        doorReference = gameObject.GetComponent<Door>();
         isLocked = true;
+        SetReferences();
+    }
+
+    public void SetReferences()
+    {
+        room1 = GetComponentInParent<Room>();
+        onNode = room1.Grid.FindNode(socketPoint.transform.position); // it's tmp measure, need to add new door point
     }
 
     #if UNITY_EDITOR
