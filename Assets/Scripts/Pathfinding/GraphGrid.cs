@@ -72,6 +72,7 @@ public class GraphGrid : MonoBehaviour
         target.isOccupied = true;
     }
 
+    // Return only not occupied neighbours
     public List<Node> GetNeighbours(Node node)
     {
         List<Node> neighboursNodes = new List<Node>();
@@ -83,7 +84,7 @@ public class GraphGrid : MonoBehaviour
         return neighboursNodes;
     }
 
-    // Return even occupied nodes
+    // Return even occupied neighbours
     public List<Node> GetAllNeighbours(Node node)
     {
         List<Node> neighboursNodes = new List<Node>();
@@ -99,6 +100,22 @@ public class GraphGrid : MonoBehaviour
         return neighboursNodes;
     }
 
+    // for debug graph matrix
+    private void PrintMatrix(List<List<int>> matrix)
+    {
+        int rowIndex = 0;
+        foreach (List<int> row in matrix)
+        {
+            string nextNodes = "";
+            foreach (int nodeIndex in row)
+            {
+                nextNodes += transform.GetChild(nodeIndex).name + " ";
+            }
+            Debug.Log(string.Format("{0}: {1}", transform.GetChild(rowIndex).name, nextNodes));
+            rowIndex++;
+        }
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -108,6 +125,9 @@ public class GraphGrid : MonoBehaviour
             {
                 InitGrid();
                 Debug.Log("DEV INFO: Graph map is generated :)");
+                //PrintMatrix(adjacencyMatrix);
+                //Debug.Log(transform.GetChild(1).GetComponent<Node>().ModelWidth/2);
+                //Debug.Log(transform.GetChild(1).eulerAngles);
                 generateGraphMap = false;
             }
 

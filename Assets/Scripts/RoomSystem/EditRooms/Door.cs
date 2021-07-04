@@ -28,7 +28,22 @@ public class Door : MonoBehaviour
         onNode = room1.Grid.FindNode(socketPoint.transform.position); // it's tmp measure, need to add new door point
     }
 
-    #if UNITY_EDITOR
+    private void Update()
+    {
+        // Check is player on door node
+        if (onNode == FindObjectOfType<TestMovement>().CurrentNode) // tmp measure need make player singletone
+        {
+            GoToNextRoom(); // better place GotToNextRoom in Player.cs (tmp for tests now)
+        }
+    }
+
+    private void GoToNextRoom()
+    {
+        Room2.InitRoom();
+        Room1.DeInitRoom();
+    }
+
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

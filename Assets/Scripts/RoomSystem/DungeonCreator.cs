@@ -64,11 +64,9 @@ public class DungeonCreator : MonoBehaviour
         // Set objects for current room doors
         Door mouseHoverDoorFixed = hoverDoor.GetComponent<Door>();
         Room currentRoom = hoverDoor.GetComponentInParent<Room>();
-        currentRoom.Grid.InitGrid();
+        currentRoom.SetReferencesForDoors();
         foreach (Door door in currentRoom.Doors)
         {
-            door.Room1 = currentRoom.GetComponent<Room>();
-            door.OnNode = currentRoom.GetComponent<Room>().Grid.FindNode(door.transform.position);
             if (mouseHoverDoorFixed.name == door.name)
             {
                 mouseHoverDoorFixed = door;

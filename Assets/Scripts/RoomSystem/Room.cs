@@ -30,6 +30,8 @@ public class Room : MonoBehaviour
 
     [SerializeField] protected GameObject environment;
     public GameObject Environment { get { return environment; } }
+    [SerializeField] protected Transform cameraPoint; // tmp solution
+    public Transform CameraPoint { get { return cameraPoint; } set { cameraPoint = value; } } // tmp solution
     protected bool isPlayerInside;
     public bool IsPlayerInside { get { return isPlayerInside; } set { isPlayerInside = value; } }
 
@@ -62,6 +64,7 @@ public class Room : MonoBehaviour
 
     protected void Update()
     {
+        // States
         // If there are enemies in the room
         if (isPlayerInside && state != RoomState.FIGHT && enemies.transform.childCount != 0)
         {
@@ -69,10 +72,11 @@ public class Room : MonoBehaviour
         }
 
         // If there are no enemies
-        else if (isPlayerInside && state == RoomState.FIGHT && enemies.transform.childCount == 0)
+        else if (isPlayerInside && state != RoomState.FREEMOVE && enemies.transform.childCount == 0)
         {
             SetState(RoomState.FREEMOVE);
         }
+
     }
 
     public void OnRoomEnter()
@@ -85,34 +89,41 @@ public class Room : MonoBehaviour
         DeInitRoom();
     }
 
-    protected void InitRoom()
+    public void InitRoom()
     {
         SetState(RoomState.DEFAULT);
-        grid.gameObject.active = true;
+        gameObject.active = true;
         grid.InitGrid();
         AstarPathfinding.Instance.Graph = grid;
+        FindObjectOfType<TestMovement>().SetPlayerPosition();
+
+        // Camera
+
+        Camera.main.transform.position = cameraPoint.position;
     }
 
-    protected void DeInitRoom()
+    public void DeInitRoom()
     {
         SetState(RoomState.DEFAULT);
-        grid.gameObject.active = false;
+        gameObject.active = false;
         isPlayerInside = false;
     }
 
     public void UnlockDoors()
     {
-        foreach (Door door in DoorsObj.GetComponentsInChildren<Door>())
+        foreach (Door door in Doors)
         {
             door.IsLocked = false;
+            door.OnNode.isOccupied = false;
         }
     }
 
     public void LockDoors()
     {
-        foreach (Door door in DoorsObj.GetComponentsInChildren<Door>())
+        foreach (Door door in Doors)
         {
             door.IsLocked = true;
+            door.OnNode.isOccupied = true;
         }
     }
 

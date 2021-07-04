@@ -66,7 +66,7 @@ public class Node : MonoBehaviour
             // in play mode and var is initialized
             if (Application.isPlaying && modelWidth != 0.0f) return modelWidth;
             // in editor mode
-            else return GetComponent<MeshRenderer>().bounds.size.x;
+            else return GetComponent<MeshRenderer>().bounds.size.magnitude;
         }
     }
     //
@@ -86,8 +86,8 @@ public class Node : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
-        Debug.Log("NORM COORDS: " + normalCoordinates.x + " " + normalCoordinates.y);
+        //Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);
+        //Debug.Log("NORM COORDS: " + normalCoordinates.x + " " + normalCoordinates.y);
 
     }
 

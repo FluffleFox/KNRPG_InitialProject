@@ -100,7 +100,7 @@ public class AstarPathfinding : MonoBehaviour
             if (pathDebug.Count != 0)
             {
                 Gizmos.color = Color.yellow;
-                float sphereRadius = GetComponent<GraphGrid>().SphereRadius;
+                float sphereRadius = graph.SphereRadius;
 
                 Node originNode = pathDebug[0];
                 Vector3 originPosition = originNode.gameObject.transform.position;

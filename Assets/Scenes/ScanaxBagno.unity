@@ -23792,7 +23792,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 593511823}
   moveTime: 0.25
-  grid: {fileID: 1297047768}
+  currentRoom: {fileID: 0}
 --- !u!95 &593511823 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 6de358b317680844eb80f01ef25f0943,
@@ -41630,7 +41630,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 32.3, y: 12.85, z: 3.35}
+  m_LocalPosition: {x: 0, y: 9.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -61323,17 +61323,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 6de358b317680844eb80f01ef25f0943,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6de358b317680844eb80f01ef25f0943,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.229
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6de358b317680844eb80f01ef25f0943,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.51
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6de358b317680844eb80f01ef25f0943,
         type: 3}
@@ -99228,6 +99228,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1574012467}
     m_Modifications:
+    - target: {fileID: 5525319173362208195, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319174324727982, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319174512331019, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319174757042794, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319174761753950, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5525319174933440091, guid: e29d10e43366eb24281602dd04738f43,
         type: 3}
       propertyPath: m_Name
@@ -99288,9 +99313,44 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5525319175099115204, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5525319175187594224, guid: e29d10e43366eb24281602dd04738f43,
         type: 3}
       propertyPath: debug
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319175187594224, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: drawGraphEdges
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319175187594224, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: generateGraphMap
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319175196616882, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319175276974649, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319175349300256, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5525319175392579875, guid: e29d10e43366eb24281602dd04738f43,
+        type: 3}
+      propertyPath: isOccupied
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

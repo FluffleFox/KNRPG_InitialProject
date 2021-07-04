@@ -10,88 +10,114 @@ public class TestMovement : MonoBehaviour
 	[Header("Parameters")]
 	// Time to move overcome 1 hex
 	public float moveTime = 0.25f;
-
-	[SerializeField] GraphGrid grid;
+	[Space(10)]
+	[SerializeField] private Room currentRoom;
+	private GraphGrid grid;
 	private Node currentNode;
+	public Node CurrentNode { get { return currentNode; } }
+
+
     private IEnumerator Start()
     {
 		yield return null;
-		currentNode = grid.FindNode(transform.position);
-		currentNode.isOccupied = true;
+		SetPlayerPosition();
     }
-    public IEnumerator Move(Vector3 targetPosition)
+
+	public void SetPlayerPosition()
+    {
+		currentNode = GetOnNode(transform.position);
+		if (currentNode)
+		{
+			currentRoom = currentNode.GetComponentInParent<Room>();
+			currentRoom.IsPlayerInside = true;
+			grid = currentRoom.Grid;
+			currentNode.isOccupied = true;
+
+			transform.position = currentNode.transform.position;
+		}
+	}
+
+    public IEnumerator Move(Node targetNode, List<Node> path)
 	{
-		Node startNode = currentNode;
-		Node targetNode = grid.FindNode(targetPosition);
-		List<Node> path = new List<Node>();
-		if (currentNode != null && targetNode != null)
+		animator.SetFloat("Speed", 1f);
+		foreach (Node node in path)
         {
-			path = AstarPathfinding.Instance.FindPath(startNode, targetNode);
-			if (path != null)
-            {
-				animator.SetFloat("Speed", 1f);
-				foreach (Node node in path)
-                {
 
-					Vector3 startPos = transform.position;
-					Vector3 nextStepPos = node.transform.position;
+			Vector3 startPos = transform.position;
+			Vector3 nextStepPos = node.transform.position;
 
-					transform.LookAt(nextStepPos);
+			transform.LookAt(nextStepPos);
 
-					float startTime = Time.time;
-					while (startTime + moveTime > Time.time)
-					{
-						transform.position = Vector3.Lerp(startPos, nextStepPos, (Time.time - startTime) / moveTime);
-						yield return null;
-					}
-					grid.UpdateGrid(currentNode, node);
-					currentNode = node;
-
-				}
-				animator.SetFloat("Speed", 0f);
+			float startTime = Time.time;
+			while (startTime + moveTime > Time.time)
+			{
+				transform.position = Vector3.Lerp(startPos, nextStepPos, (Time.time - startTime) / moveTime);
+				yield return null;
 			}
-            else
-            {
-				Debug.Log("No possible path");
-            }
-        }
+			grid.UpdateGrid(currentNode, node);
+			currentNode = node;
+
+		}
+		animator.SetFloat("Speed", 0f);
+
+        
 	}
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-			StopAllCoroutines();
-			var clickPoint = cursorOnTransform;
-			StartCoroutine(Move(clickPoint));
+		if (Input.GetMouseButtonDown(0))
+		{
+			Node startNode = currentNode;
+			var target = GetMouseOverlap(typeof(Node));
+			if (currentNode && target)
+			{
+				Node targetNode = target.GetComponent<Node>();
+				List<Node> path = new List<Node>();
+				path = AstarPathfinding.Instance.FindPath(startNode, targetNode);
+				if (path != null && !targetNode.isOccupied)
+				{
+					StopAllCoroutines();
+					StartCoroutine(Move(targetNode, path));
+				}
+				else
+				{
+					Debug.Log("No possible way");
+				}
+				
+			}
+			else
+			{
+				Debug.Log("No node exists way");
+			}
 		}
     }
 
-	// Get mouse click world coordinates helpers
-	private static Vector3 cursorWorldPosOnNCP
+
+	private GameObject GetMouseOverlap(System.Type comp)
 	{
-		get
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit, 100f))
 		{
-			return Camera.main.ScreenToWorldPoint(
-				new Vector3(Input.mousePosition.x,
-				Input.mousePosition.y,
-				Camera.main.nearClipPlane));
+			if (hit.transform.GetComponent(comp))
+			{
+				return hit.transform.gameObject;
+			}
 		}
+		return null;
 	}
-	private static Vector3 cameraToCursor
+
+	private Node GetOnNode(Vector3 position)
 	{
-		get
+		RaycastHit hit;
+		if (Physics.Raycast(position, -Vector3.up, out hit))
 		{
-			return cursorWorldPosOnNCP - Camera.main.transform.position;
+			Debug.DrawRay(position, -Vector3.up, Color.black, 5f);
+			if (hit.transform.GetComponent<Node>())
+			{
+				return hit.transform.GetComponent<Node>();
+			}
 		}
-	}
-	private Vector3 cursorOnTransform
-	{
-		get
-		{
-			Vector3 camToTrans = transform.position - Camera.main.transform.position;
-			return Camera.main.transform.position +
-				cameraToCursor *
-				(Vector3.Dot(Camera.main.transform.forward, camToTrans) / Vector3.Dot(Camera.main.transform.forward, cameraToCursor));
-		}
+		return null;
 	}
 }
+
