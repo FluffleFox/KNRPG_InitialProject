@@ -12,16 +12,12 @@ public class GraphGrid : MonoBehaviour
     [SerializeField] private bool generateGraphMap; // Just click on the checkbox
     [SerializeField] private bool drawGraphEdges;
     [SerializeField] private float sphereRadius;
-    public float SphereRadius { get { return sphereRadius; } }
-
     private List<List<int>> adjacencyMatrix;
-    public List<List<int>> AdjacencyMatrix 
-    { 
-        get 
-        {
-            return adjacencyMatrix;
-        } 
-    }
+
+
+    public List<List<int>> AdjacencyMatrix { get { return adjacencyMatrix; } }
+
+    public float SphereRadius { get { return sphereRadius; } }
 
     private void Start()
     {
@@ -38,9 +34,9 @@ public class GraphGrid : MonoBehaviour
             foreach (Transform target in mapObj.transform)
             {
                 Vector2 target2DPosition = new Vector2(target.position.x, target.position.z);
-                float reachDistance = origin.GetComponent<Node>().ModelWidth / 2 + target.GetComponent<Node>().ModelWidth / 2;
-                
-                if (Vector2.Distance(origin2DPosition, target2DPosition) <= reachDistance && !target.GetComponent<Node>().isOccupied)
+                float reachDistance = origin.GetComponent<Node>().NodeConnectRadius / 2 + target.GetComponent<Node>().NodeConnectRadius / 2;
+
+                if (Vector2.Distance(origin2DPosition, target2DPosition) <= reachDistance) // && !target.GetComponent<Node>().isOccupied
                 {
                     adjacencyList.Add(target.GetComponent<Node>().IndexInGrid);
                 }
@@ -56,7 +52,7 @@ public class GraphGrid : MonoBehaviour
         foreach (Transform nodeTransform in mapObj.transform)
         {
             Node node = nodeTransform.GetComponent<Node>();
-            float reachDistance = node.ModelWidth / 2;
+            float reachDistance = node.NodeConnectRadius / 2;
             // is point inside of hex
             if (Mathf.Pow((position.x - node.transform.position.x),2) + Mathf.Pow((position.z - node.transform.position.z),2) <= Mathf.Pow(reachDistance,2))
             {
@@ -72,32 +68,32 @@ public class GraphGrid : MonoBehaviour
         target.isOccupied = true;
     }
 
-    // Return only not occupied neighbours
+    // Return all neighbours
     public List<Node> GetNeighbours(Node node)
     {
-        List<Node> neighboursNodes = new List<Node>();
+        List<Node> neighbourNodes = new List<Node>();
         int index = node.IndexInGrid;
         for (int j = 0; j < adjacencyMatrix[index].Count; j++)
         {
-            neighboursNodes.Add(transform.GetChild(adjacencyMatrix[index][j]).GetComponent<Node>());
+            neighbourNodes.Add(transform.GetChild(adjacencyMatrix[index][j]).GetComponent<Node>());
         }
-        return neighboursNodes;
+        return neighbourNodes;
     }
 
-    // Return even occupied neighbours
-    public List<Node> GetAllNeighbours(Node node)
+    // Return only not occupied nodes
+    public List<Node> GetAvailableNeighbours(Node node)
     {
-        List<Node> neighboursNodes = new List<Node>();
-        float radius = node.ModelWidth * Mathf.Sqrt(3) / 2;
-        foreach (Collider neighbourCollider in Physics.OverlapSphere(node.transform.position, radius))
+        List<Node> neighbourNodes = new List<Node>();
+        int index = node.IndexInGrid;
+        for (int j = 0; j < adjacencyMatrix[index].Count; j++)
         {
-            if (neighbourCollider.GetComponent<Node>())
+            Node neighbourNode = transform.GetChild(adjacencyMatrix[index][j]).GetComponent<Node>();
+            if (!neighbourNode.isOccupied)
             {
-                neighboursNodes.Add(neighbourCollider.GetComponent<Node>());
+                neighbourNodes.Add(transform.GetChild(adjacencyMatrix[index][j]).GetComponent<Node>());
             }
         }
-
-        return neighboursNodes;
+        return neighbourNodes;
     }
 
     // for debug graph matrix
@@ -126,7 +122,7 @@ public class GraphGrid : MonoBehaviour
                 InitGrid();
                 Debug.Log("DEV INFO: Graph map is generated :)");
                 //PrintMatrix(adjacencyMatrix);
-                //Debug.Log(transform.GetChild(1).GetComponent<Node>().ModelWidth/2);
+                Debug.Log(transform.GetChild(1).GetComponent<Node>().NodeConnectRadius/2);
                 //Debug.Log(transform.GetChild(1).eulerAngles);
                 generateGraphMap = false;
             }

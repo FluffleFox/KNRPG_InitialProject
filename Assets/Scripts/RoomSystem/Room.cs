@@ -10,8 +10,6 @@ public class Room : MonoBehaviour
         FIGHT,
         FREEMOVE
     }
-    protected RoomState state;
-    public RoomState State { get { return state; } }
     public enum RoomType
     {
         STARTROOM,
@@ -19,30 +17,32 @@ public class Room : MonoBehaviour
         BOSSROOM
     }
     [SerializeField] protected RoomType type;
-    public RoomType Type { get { return type; } }
     [SerializeField] protected GraphGrid grid;
-    public GraphGrid Grid { get { return grid; } }
     [SerializeField] protected GameObject doors;
-    public GameObject DoorsObj { get { return doors; } }
-    public Door[] Doors { get { return doors.GetComponentsInChildren<Door>(); } }
     [SerializeField] protected GameObject enemies;
+    [SerializeField] protected GameObject environment;
+    [SerializeField] protected Transform cameraPoint; // tmp solution
+    protected RoomState state;
+    protected bool isPlayerInside;
+
+
+    public RoomType Type { get { return type; } }
+
+    public GraphGrid Grid { get { return grid; } }
+
+    public GameObject DoorsObj { get { return doors; } }
+
+    public Door[] Doors { get { return doors.GetComponentsInChildren<Door>(); } }
+
     public GameObject EnemiesObj { get { return enemies; } }
 
-    [SerializeField] protected GameObject environment;
     public GameObject Environment { get { return environment; } }
-    [SerializeField] protected Transform cameraPoint; // tmp solution
+
     public Transform CameraPoint { get { return cameraPoint; } set { cameraPoint = value; } } // tmp solution
-    protected bool isPlayerInside;
+
     public bool IsPlayerInside { get { return isPlayerInside; } set { isPlayerInside = value; } }
 
-
-    protected void Start()
-    {
-        if (type != RoomType.STARTROOM)
-        {
-            DeInitRoom();
-        }
-    }
+    public RoomState State { get { return state; } }
 
     protected void SetState(RoomState newState)
     {
@@ -89,17 +89,21 @@ public class Room : MonoBehaviour
         DeInitRoom();
     }
 
+
+    public void PlayerEnterInRoom()
+    {
+        InitRoom();
+        AstarPathfinding.Instance.Graph = grid;
+
+        // Camera
+        Camera.main.transform.position = cameraPoint.position;
+    }
+
     public void InitRoom()
     {
         SetState(RoomState.DEFAULT);
         gameObject.active = true;
         grid.InitGrid();
-        AstarPathfinding.Instance.Graph = grid;
-        FindObjectOfType<TestMovement>().SetPlayerPosition();
-
-        // Camera
-
-        Camera.main.transform.position = cameraPoint.position;
     }
 
     public void DeInitRoom()
@@ -113,9 +117,13 @@ public class Room : MonoBehaviour
     {
         foreach (Door door in Doors)
         {
-            door.IsLocked = false;
-            door.OnNode.isOccupied = false;
+            if (door.IsDoorConnected)
+            {
+                door.IsLocked = false;
+                door.OnNode.isOccupied = false;
+            }
         }
+        grid.InitGrid();
     }
 
     public void LockDoors()
@@ -123,7 +131,7 @@ public class Room : MonoBehaviour
         foreach (Door door in Doors)
         {
             door.IsLocked = true;
-            door.OnNode.isOccupied = true;
+            //door.OnNode.isOccupied = true;
         }
     }
 

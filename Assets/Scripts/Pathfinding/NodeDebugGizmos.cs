@@ -25,22 +25,35 @@ public class NodeDebugGizmos : MonoBehaviour
             {
                 Gizmos.color = Color.red;
             }
+            Gizmos.DrawSphere(originPosition, sphereRadius);
             try
             {
                 var neighbours = transform.parent.GetComponent<GraphGrid>().GetNeighbours(GetComponent<Node>());
                 foreach (var node in neighbours)
                 {
+                    if (!node.isOccupied)
+                    {
+                        Gizmos.color = Color.green;
+                    }
+                    else
+                    {
+                        Gizmos.color = Color.red;
+                    }
+
                     Vector3 targetPosition = node.transform.position;
                     targetPosition.y += sphereRadius + node.GetComponent<MeshRenderer>().bounds.size.y;
                     Gizmos.DrawLine(originPosition, targetPosition);
                     Gizmos.DrawSphere(targetPosition, sphereRadius);
                 }
-                Gizmos.DrawSphere(originPosition, sphereRadius);
             }
             catch (System.NullReferenceException e)
             {
                 Debug.Log("DEV INFO: Graph map IS NOT generated, CLICK ON 'Generate Graph Map' on 'GraphGrid.cs'");
             }
+
+            // Draw reach distance
+            Handles.color = Color.yellow;
+            Handles.DrawWireDisc(originPosition, transform.up, GetComponent<Node>().NodeConnectRadius);
         }
     }
 

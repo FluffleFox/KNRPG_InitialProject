@@ -14,18 +14,20 @@ public class TestMovement : MonoBehaviour
 	[SerializeField] private Room currentRoom;
 	private GraphGrid grid;
 	private Node currentNode;
-	public Node CurrentNode { get { return currentNode; } }
 
+
+	public Node CurrentNode { get { return currentNode; } }
 
     private IEnumerator Start()
     {
 		yield return null;
-		SetPlayerPosition();
+		OnRoomEnter();
     }
 
-	public void SetPlayerPosition()
-    {
+	public void OnRoomEnter()
+	{ 
 		currentNode = GetOnNode(transform.position);
+		Debug.Log(currentNode);
 		if (currentNode)
 		{
 			currentRoom = currentNode.GetComponentInParent<Room>();
@@ -33,7 +35,7 @@ public class TestMovement : MonoBehaviour
 			grid = currentRoom.Grid;
 			currentNode.isOccupied = true;
 
-			transform.position = currentNode.transform.position;
+			transform.position = new Vector3(currentNode.transform.position.x, currentNode.transform.position.y + 0.25f, currentNode.transform.position.z);
 		}
 	}
 
@@ -42,9 +44,8 @@ public class TestMovement : MonoBehaviour
 		animator.SetFloat("Speed", 1f);
 		foreach (Node node in path)
         {
-
 			Vector3 startPos = transform.position;
-			Vector3 nextStepPos = node.transform.position;
+			Vector3 nextStepPos = new Vector3(node.transform.position.x, node.transform.position.y + 0.25f, node.transform.position.z);
 
 			transform.LookAt(nextStepPos);
 
@@ -59,38 +60,41 @@ public class TestMovement : MonoBehaviour
 
 		}
 		animator.SetFloat("Speed", 0f);
-
-        
 	}
+
+	public void InitMove(GameObject targetNodeObject)
+    {
+		// Exit if node not exists
+		if (!targetNodeObject || !currentNode)
+        {
+			Debug.Log("No node exists way");
+			return;
+        }
+
+		Node startNode = currentNode;
+		Node targetNode = targetNodeObject.GetComponent<Node>();
+
+		List<Node> path = new List<Node>();
+		path = AstarPathfinding.Instance.FindPath(startNode, targetNode);
+		if (path != null && !targetNode.isOccupied)
+		{
+			StopAllCoroutines();
+			StartCoroutine(Move(targetNode, path));
+		}
+		else
+		{
+			Debug.Log("No possible way");
+		}
+	}
+
     private void Update()
     {
 		if (Input.GetMouseButtonDown(0))
 		{
-			Node startNode = currentNode;
 			var target = GetMouseOverlap(typeof(Node));
-			if (currentNode && target)
-			{
-				Node targetNode = target.GetComponent<Node>();
-				List<Node> path = new List<Node>();
-				path = AstarPathfinding.Instance.FindPath(startNode, targetNode);
-				if (path != null && !targetNode.isOccupied)
-				{
-					StopAllCoroutines();
-					StartCoroutine(Move(targetNode, path));
-				}
-				else
-				{
-					Debug.Log("No possible way");
-				}
-				
-			}
-			else
-			{
-				Debug.Log("No node exists way");
-			}
+			InitMove(target);
 		}
-    }
-
+	}
 
 	private GameObject GetMouseOverlap(System.Type comp)
 	{
@@ -109,8 +113,9 @@ public class TestMovement : MonoBehaviour
 	private Node GetOnNode(Vector3 position)
 	{
 		RaycastHit hit;
-		if (Physics.Raycast(position, -Vector3.up, out hit))
+		if (Physics.Raycast(position, -Vector3.up, out hit, 100f))
 		{
+			Debug.Log(hit.transform.name);
 			Debug.DrawRay(position, -Vector3.up, Color.black, 5f);
 			if (hit.transform.GetComponent<Node>())
 			{

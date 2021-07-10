@@ -18,24 +18,17 @@ public class RoomCreator : MonoBehaviour
         ADDOBJ
     }
     [SerializeField] private Room roomToEdit;
-    public Room RoomToEdit { get { return roomToEdit; } }
     [SerializeField] private GraphGrid grid;
-    public GraphGrid Grid { get { return grid; } }
     [SerializeField] private GameObject hexGhostPrefab;
     private RoomCreatorMode mode = RoomCreatorMode.DEFAULT;
-    public RoomCreatorMode Mode { get { return mode; } }
     private List<GameObject> hexGhosts;
     private GameObject currentNode;   // mouse hover on hex
     private GameObject selectedGhost; // mouse hover on green hex
     private Vector3 mousePos;
-
     // Objects tab
     private EditorPrefabsScriptable.PrefabRoomEditorType roomEditorPrefab;
-    public EditorPrefabsScriptable.PrefabRoomEditorType RoomEditorType { get { return roomEditorPrefab; } set { roomEditorPrefab = value; } }
     private EditorPrefabsScriptable selectedScriptable;
-    public EditorPrefabsScriptable SelectedScriptable { get { return selectedScriptable; } set { selectedScriptable = value; } }
     private GameObject selectedPrefab;
-    public GameObject SelectedPrefab { get { return selectedPrefab; } set { selectedPrefab = value; } }
     [HideInInspector] public EditorPrefabsScriptable[] editorScriptables;
     public enum RotationType
     {
@@ -53,9 +46,22 @@ public class RoomCreator : MonoBehaviour
         ROTATION_330,
     }
     private RotationType rotation;
-    public RotationType Rotation { get { return rotation; } set { rotation = value; } }
     private GameObject possibleCollision;
-    
+
+
+    public Room RoomToEdit { get { return roomToEdit; } }
+
+    public GraphGrid Grid { get { return grid; } }
+
+    public RoomCreatorMode Mode { get { return mode; } }
+
+    public EditorPrefabsScriptable.PrefabRoomEditorType RoomEditorType { get { return roomEditorPrefab; } set { roomEditorPrefab = value; } }
+
+    public EditorPrefabsScriptable SelectedScriptable { get { return selectedScriptable; } set { selectedScriptable = value; } }
+
+    public GameObject SelectedPrefab { get { return selectedPrefab; } set { selectedPrefab = value; } }
+
+    public RotationType Rotation { get { return rotation; } set { rotation = value; } }
 
     public void SetMode(RoomCreatorMode newMode)
     {
@@ -109,8 +115,16 @@ public class RoomCreator : MonoBehaviour
                     break;
             }
 
-            // Show selected node
+            // Show selected node if this node from this room
             GameObject nodeObject = GetMouseOverlap(typeof(Node));
+            if (nodeObject)
+            {
+                if (nodeObject.GetComponentInParent<Room>() != RoomToEdit)
+                {
+                    nodeObject = null;
+                }
+            }
+
             if (nodeObject && currentNode != nodeObject)
             {
                 if (mode == RoomCreatorMode.ADD)
@@ -141,7 +155,7 @@ public class RoomCreator : MonoBehaviour
                     break;
                 case (RoomCreatorMode.ADDOBJ):
                     // Draw blue line depending on rotation angle
-                    float radius = currentNode.GetComponent<Node>().ModelWidth / 2;
+                    float radius = currentNode.GetComponent<Node>().NodeConnectRadius / 2;
                     Vector3 nodePos = currentNode.transform.position;
                     float height = currentNode.GetComponent<Node>().ModelHeight + 0.25f;
                     float angle = (int)rotation * 30 * Mathf.PI / 180;
@@ -158,40 +172,53 @@ public class RoomCreator : MonoBehaviour
 
     private void InitGhosts()
     {
-        List<Node> nodeNeighbours = grid.GetAllNeighbours(currentNode.GetComponent<Node>());
+        Debug.Log(currentNode.transform.eulerAngles.y);
+        List<Node> nodeNeighbours = grid.GetNeighbours(currentNode.GetComponent<Node>());
         List<bool> isNodeExists = Enumerable.Repeat(false, 6).ToList();
 
         //  Depending on clockwise direction find sides with hex
-        foreach (Node node in nodeNeighbours)
+        float originPositionX = currentNode.transform.position.x;
+        float originPositionZ = currentNode.transform.position.z;
+        if ((int)Mathf.Abs(currentNode.transform.eulerAngles.y) % 60 != 0)
         {
-            // TODO rework to model width istead of values
-            if (node.transform.position.x - currentNode.transform.position.x == 0.0f
-                && node.transform.position.z - currentNode.transform.position.z == -1.0f)
+            float tmpVal = originPositionX;
+            originPositionX = originPositionZ;
+            originPositionZ = tmpVal;
+        }
+
+        foreach (Node neighbourNode in nodeNeighbours)
+        {
+            float targetPositionX = neighbourNode.transform.position.x;
+            float targetPositionZ = neighbourNode.transform.position.z;
+            if ((int)Mathf.Abs(neighbourNode.transform.eulerAngles.y) % 60 != 0)
+            {
+                float tmpVal = targetPositionX;
+                targetPositionX = targetPositionZ;
+                targetPositionZ = tmpVal;
+            }
+
+            // TODO rework to model width istead of strict values (because sometimes it doesn't see exist nodes)
+            if (targetPositionX - originPositionX == 0.0f && targetPositionZ - originPositionZ == -1.0f)
             {
                 isNodeExists[0] = true;
             }
-            else if (node.transform.position.x - currentNode.transform.position.x <= -0.8f
-                && node.transform.position.z - currentNode.transform.position.z == -0.5f)
+            else if (targetPositionX - originPositionX <= -0.8f && targetPositionZ - originPositionZ == -0.5f)
             {
                 isNodeExists[1] = true;
             }
-            else if (node.transform.position.x - currentNode.transform.position.x <= -0.8f
-                && node.transform.position.z - currentNode.transform.position.z == 0.5f)
+            else if (targetPositionX - originPositionX <= -0.8f && targetPositionZ - originPositionZ == 0.5f)
             {
                 isNodeExists[2] = true;
             }
-            else if (node.transform.position.x - currentNode.transform.position.x == 0.0f
-                && node.transform.position.z - currentNode.transform.position.z == 1.0f)
+            else if (targetPositionX - originPositionX == 0.0f && targetPositionZ - originPositionZ == 1.0f)
             {
                 isNodeExists[3] = true;
             }
-            else if (node.transform.position.x - currentNode.transform.position.x >= 0.8f
-                && node.transform.position.z - currentNode.transform.position.z == 0.5f)
+            else if (targetPositionX - originPositionX >= 0.8f && targetPositionZ - originPositionZ == 0.5f)
             {
                 isNodeExists[4] = true;
             }
-            else if (node.transform.position.x - currentNode.transform.position.x >= 0.8f
-                && node.transform.position.z - currentNode.transform.position.z == -0.5f)
+            else if (targetPositionX - originPositionX >= 0.8f && targetPositionZ - originPositionZ == -0.5f)
             {
                 isNodeExists[5] = true;
             }
@@ -203,53 +230,53 @@ public class RoomCreator : MonoBehaviour
             {
                 Transform parent = currentNode.transform.parent;
                 Vector3 position = currentNode.transform.position;
-                GameObject newNode;
+
+                float offsetZ = 0f;
+                float offsetX = 0f;
+
                 switch (i)
                 {
                     case (0):
-                        position.z -= 1.0f;
-                        newNode = Instantiate(hexGhostPrefab, position, Quaternion.identity);
-                        newNode.GetComponent<NodeGhost>().ParentForNode = parent;
-                        hexGhosts.Add(newNode);
+                        offsetZ -= 1.0f;
                         break;
                     case (1):
-                        position.x -= 0.866f;
-                        position.z -= 0.5f;
-                        newNode = Instantiate(hexGhostPrefab, position, Quaternion.identity);
-                        newNode.GetComponent<NodeGhost>().ParentForNode = parent;
-                        hexGhosts.Add(newNode);
+                        offsetX -= 0.866f;
+                        offsetZ -= 0.5f;
                         break;
                     case (2):
-                        position.x -= 0.866f;
-                        position.z += 0.5f;
-                        newNode = Instantiate(hexGhostPrefab, position, Quaternion.identity);
-                        newNode.GetComponent<NodeGhost>().ParentForNode = parent;
-                        hexGhosts.Add(newNode);
+                        offsetX -= 0.866f;
+                        offsetZ += 0.5f;
                         break;
                     case (3):
-                        position.z += 1.0f;
-                        newNode = Instantiate(hexGhostPrefab, position, Quaternion.identity);
-                        newNode.GetComponent<NodeGhost>().ParentForNode = parent;
-                        hexGhosts.Add(newNode);
+                        offsetZ += 1.0f;
                         break;
                     case (4):
-                        position.x += 0.866f;
-                        position.z += 0.5f;
-                        newNode = Instantiate(hexGhostPrefab, position, Quaternion.identity);
-                        newNode.GetComponent<NodeGhost>().ParentForNode = parent;
-                        hexGhosts.Add(newNode);
+                        offsetX += 0.866f;
+                        offsetZ += 0.5f;
                         break;
                     case (5):
-                        position.x += 0.866f;
-                        position.z -= 0.5f;
-                        newNode = Instantiate(hexGhostPrefab, position, Quaternion.identity);
-                        newNode.GetComponent<NodeGhost>().ParentForNode = parent;
-                        hexGhosts.Add(newNode);
+                        offsetX += 0.866f;
+                        offsetZ -= 0.5f;
                         break;
                 }
+
+                if ((int)Mathf.Abs(currentNode.transform.eulerAngles.y) % 60 != 0)
+                {
+                    float tmpVal = offsetX;
+                    offsetX = offsetZ;
+                    offsetZ = tmpVal;
+                }
+
+                position.x += offsetX;
+                position.z += offsetZ;
+
+                GameObject newNode = Instantiate(hexGhostPrefab, position, currentNode.transform.rotation);
+                newNode.GetComponent<NodeGhost>().ParentForNode = parent;
+                hexGhosts.Add(newNode);
             }
         }
     }
+
     public void InteractWithGhosts()
     {
         if (selectedGhost)
@@ -258,6 +285,7 @@ public class RoomCreator : MonoBehaviour
             grid.InitGrid();
         }
     }
+
     public void DeleteNode()
     {
         if (currentNode)
@@ -266,6 +294,7 @@ public class RoomCreator : MonoBehaviour
             grid.InitGrid();
         }
     }
+
     public void SpawnObject()
     {
         if (currentNode)
@@ -309,6 +338,7 @@ public class RoomCreator : MonoBehaviour
             }
         }
     }
+
 	// Detect cursor overlap GameObject
 	private GameObject GetMouseOverlap(System.Type comp)
     {
@@ -316,9 +346,6 @@ public class RoomCreator : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100f))
         {
-            //Debug.DrawRay(ray.origin, hit.transform.position, Color.blue, 5f);
-            //Debug.Log(hit.transform.name);
-            //Debug.Log(hit.transform.position);
             if (hit.transform.GetComponent(comp))
             {
                 return hit.transform.gameObject;

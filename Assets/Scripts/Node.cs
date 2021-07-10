@@ -35,38 +35,43 @@ public class Node : MonoBehaviour
 
     // For Astar path
     private Node parent = null;
-    public Node Parent { get { return parent; } set { parent = value; } }
     private int indexInGrid;
-    public int IndexInGrid 
-    { 
+    private float modelHeight;
+    [SerializeField] private float nodeConnectRadius;
+
+
+    public Node Parent { get { return parent; } set { parent = value; } }
+
+    public int IndexInGrid
+    {
         get
         {
             // in play mode and var is initialized
             if (Application.isPlaying && indexInGrid != 0) return indexInGrid;
             // in editor mode
-            else return transform.GetSiblingIndex(); 
-        } 
+            else return transform.GetSiblingIndex();
+        }
     }
-    private float modelHeight;
-    public float ModelHeight 
-    { 
+
+    public float ModelHeight
+    {
         get
         {
             // in play mode and var is initialized
             if (Application.isPlaying && modelHeight != 0.0f) return modelHeight;
             // in editor mode
             else return GetComponent<MeshRenderer>().bounds.size.y;
-        } 
+        }
     }
-    private float modelWidth;
-    public float ModelWidth
+
+    public float NodeConnectRadius
     {
         get
         {
             // in play mode and var is initialized
-            if (Application.isPlaying && modelWidth != 0.0f) return modelWidth;
+            if (Application.isPlaying && nodeConnectRadius != 0.0f) return nodeConnectRadius;
             // in editor mode
-            else return GetComponent<MeshRenderer>().bounds.size.magnitude;
+            else return nodeConnectRadius;
         }
     }
     //
@@ -82,8 +87,8 @@ public class Node : MonoBehaviour
 
         indexInGrid = transform.GetSiblingIndex();
         modelHeight = GetComponent<MeshRenderer>().bounds.size.y;
-        modelWidth  = GetComponent<MeshRenderer>().bounds.size.x;
     }
+
     private void OnMouseDown()
     {
         //Debug.Log("X: " + cubeCoordinates.x + " Y: " + cubeCoordinates.y + "Z: " + cubeCoordinates.z);

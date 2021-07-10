@@ -21,8 +21,9 @@ public class AstarPathfinding : MonoBehaviour
     [SerializeField] private bool debug;
     private List<Node> pathDebug;
     [SerializeField] private GraphGrid graph;
-    public GraphGrid Graph { set { graph = value; } }
 
+
+    public GraphGrid Graph { set { graph = value; } }
 
     private void Start()
     {

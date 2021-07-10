@@ -12,24 +12,30 @@ public class DungeonCreator : MonoBehaviour
         REMOVE
     }
     private DungeonCreatorMode mode = DungeonCreatorMode.DEFAULT;
-    public DungeonCreatorMode Mode { get { return mode; } }
     private Vector3 mousePos;
     // Add room mode
     private GameObject mouseHoverDoor;
     private Door lastMouseHoverDoor;
-    public Door LastMouseHoverDoor { get { return lastMouseHoverDoor; } }
     [HideInInspector] public GameObject[] RoomPrefabs;
     private GameObject selectedRoomPrefab;
-    public GameObject SelectedRoomPrefab { get { return selectedRoomPrefab; } set { selectedRoomPrefab = value; } }
     private GameObject selectedRoomDoor;
     private string oldSelectedRoomDoorName;
-    public string OldSelectedRoomDoorName { get { return oldSelectedRoomDoorName; } set { oldSelectedRoomDoorName = value; } }
-    public GameObject SelectedRoomDoor { get { return selectedRoomDoor; } set { selectedRoomDoor = value; } }
     private GameObject ghostRoom;
-    public GameObject GhostRoom { get { return ghostRoom; } }
     // Remove room mode
     private GameObject mouseHoverRoom;
 
+
+    public DungeonCreatorMode Mode { get { return mode; } }
+
+    public Door LastMouseHoverDoor { get { return lastMouseHoverDoor; } }
+
+    public GameObject SelectedRoomPrefab { get { return selectedRoomPrefab; } set { selectedRoomPrefab = value; } }
+
+    public string OldSelectedRoomDoorName { get { return oldSelectedRoomDoorName; } set { oldSelectedRoomDoorName = value; } }
+
+    public GameObject SelectedRoomDoor { get { return selectedRoomDoor; } set { selectedRoomDoor = value; } }
+
+    public GameObject GhostRoom { get { return ghostRoom; } }
 
     public void SetMode(DungeonCreatorMode newMode)
     {
@@ -100,7 +106,6 @@ public class DungeonCreator : MonoBehaviour
                                      mouseHoverDoorFixed.GetComponent<Door>().OnNode.transform.position.z - ghostRoomPrefabDoor.GetComponent<Door>().OnNode.transform.position.z);
         ghostRoom.transform.position += offset;
         ghostRoom.name = System.String.Format("{0} ({1})", ghostRoom.name, transform.childCount + 1);
-
     }
 
     public void SpawnRoom()
