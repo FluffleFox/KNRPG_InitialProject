@@ -2262,9 +2262,9 @@ GameObject:
   - component: {fileID: 3138730807857802177}
   - component: {fileID: 1594528106781674795}
   - component: {fileID: 2715399929194329414}
-  - component: {fileID: 5555063261131269129}
-  - component: {fileID: 3632719823228424779}
   - component: {fileID: 1929204366967845600}
+  - component: {fileID: 6449569371656096057}
+  - component: {fileID: 5207443197007819121}
   m_Layer: 0
   m_Name: Janna
   m_TagString: Player
@@ -2335,39 +2335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83b5a82abf2228a4e9f9d4f1a4be270f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  currentNode: {fileID: 0}
+  animator: {fileID: 3138730807857802177}
   grid: {fileID: 0}
   moveTime: 0.5
---- !u!114 &5555063261131269129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8513210061269363457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64f0abbbbce57614b8a893885eb8c36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OrdersList: []
-  movement: {fileID: 2715399929194329414}
-  skills: {fileID: 3632719823228424779}
---- !u!114 &3632719823228424779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8513210061269363457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 757d2f0bcadc93c4fa2ce5b620a2692d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Skill1: Heal
-  Skill2: Fireball
-  Skill3: Thunder
 --- !u!114 &1929204366967845600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2380,6 +2351,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4998fb7adb6c39f42b052684ba187d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Orders2: {fileID: 6449569371656096057}
+--- !u!114 &6449569371656096057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8513210061269363457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afda3f8424963b14b8fc8e5f0b926c7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitOrder:
+    Path: []
+    SkillId: 0
+    SkillTarget: {x: 0, y: 0, z: 0}
+  Grid: {fileID: 0}
+--- !u!114 &5207443197007819121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8513210061269363457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 757d2f0bcadc93c4fa2ce5b620a2692d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Skill1: Attack
+  Skill2: Defend
+  Skill3: Heal
 --- !u!1 &8543913825736599490
 GameObject:
   m_ObjectHideFlags: 0

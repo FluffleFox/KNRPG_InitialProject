@@ -9,7 +9,7 @@ public class Orders : MonoBehaviour
 
 	[Header("Connections")]
 	public UnitMovement movement;
-	public SkillsManager skills;
+	public Skills skills;
 	public GraphGrid grid;
 
 	private Node currentNode;
@@ -108,13 +108,13 @@ public class Orders : MonoBehaviour
 					yield return StartCoroutine(movement.Attack(x.param));
 					break;
 				case OrderType.skill1:
-					yield return StartCoroutine(skills.PerformSkill1(x.param));
+					//yield return StartCoroutine(skills.PerformSkill1(x.param));
 					break;
 				case OrderType.skill2:
-					yield return StartCoroutine(skills.PerformSkill2(x.param));
+					//yield return StartCoroutine(skills.PerformSkill2(x.param));
 					break;
 				case OrderType.skill3:
-					yield return StartCoroutine(skills.PerformSkill3(x.param));
+					//yield return StartCoroutine(skills.PerformSkill3(x.param));
 					break;
 				case OrderType.wait:
 					yield return new WaitForSeconds(3f);

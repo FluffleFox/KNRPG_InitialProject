@@ -51,7 +51,7 @@ public class GraphGrid : MonoBehaviour
     {
         foreach (Transform nodeTransform in mapObj.transform)
         {
-            Node node = nodeTransform.GetComponent<Node>();
+			Node node = nodeTransform.GetComponent<Node>();
             float reachDistance = node.NodeConnectRadius / 2;
             // is point inside of hex
             if (Mathf.Pow((position.x - node.transform.position.x),2) + Mathf.Pow((position.z - node.transform.position.z),2) <= Mathf.Pow(reachDistance,2))

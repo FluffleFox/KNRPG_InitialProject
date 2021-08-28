@@ -5,14 +5,12 @@ using UnityEngine;
 public class PlanningController : MonoBehaviour
 {
 	[Header("Connections")]
-	public Orders Orders;
-
+	public Orders2 Orders2;
 	private void Update()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			Orders.NewOrder(Orders.OrderType.move, cursorOnTransform);
-			Orders.ShowOrders();
+			//Orders2.MakePath(cameraToCursor);
 		}
 	}
 	private static Vector3 cursorWorldPosOnNCP
