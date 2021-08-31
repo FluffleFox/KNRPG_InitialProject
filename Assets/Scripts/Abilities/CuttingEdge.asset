@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8c6a5a19ff3445690566d843b19b477, type: 3}
-  m_Name: Fireball
+  m_Script: {fileID: 11500000, guid: 98099450574e4566b8cc2ea819d25210, type: 3}
+  m_Name: CuttingEdge
   m_EditorClassIdentifier: 
-  abilityName: Fireball
+  abilityName: CuttingEdge
   abilityUISprite: {fileID: 0}
-  abilityTargets: 2
+  abilityModifiers:
+  - value: 15
+    modifier: 0
