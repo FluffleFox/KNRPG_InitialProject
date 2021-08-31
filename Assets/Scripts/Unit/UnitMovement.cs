@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class UnitMovement : MonoBehaviour
 {
+	public Node currentNode;
 	[Header("Connections")]
 	public Animator animator;
 	[SerializeField] GraphGrid grid;
 	[Header("Parameters")]
 	public float moveTime = 0.5f;
 	
-	private Node currentNode;
+	
 	private IEnumerator Start()
 	{
 		yield return null;
