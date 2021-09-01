@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlanningController : MonoBehaviour
 {
 	[Header("Connections")]
-	public Orders2 Orders2;
+	public Orders Orders;
 	private void Update()
 	{
 		if (Input.GetMouseButtonDown(0))

@@ -5,11 +5,11 @@ using UnityEngine;
 public class FightController : MonoBehaviour
 {
 	public GameObject UnitsParent;
-	private Orders2[] AllUnitsOrders;
+	private Orders[] AllUnitsOrders;
 	
 	public void FightStage()
 	{
-		AllUnitsOrders = UnitsParent.GetComponentsInChildren<Orders2>();
+		AllUnitsOrders = UnitsParent.GetComponentsInChildren<Orders>();
 		//Debug.Log(AllUnitsOrders.Length);
 		SolveColisions();
 		MoveAllUnits();
@@ -17,27 +17,27 @@ public class FightController : MonoBehaviour
 	}
 	private void MoveAllUnits()
 	{
-		foreach (Orders2 orders in AllUnitsOrders)
+		foreach (Orders orders in AllUnitsOrders)
 		{
 			UnitMovement movement = orders.gameObject.GetComponent<UnitMovement>();
-			movement.StartCoroutine(movement.Move(orders.UnitOrder.Path));
+			movement.StartCoroutine(movement.Move(orders.Path));
 		}
 	}
 	private void CastSkillAllUnits()
 	{
-		foreach (Orders2 orders in AllUnitsOrders)
+		foreach (Orders orders in AllUnitsOrders)
 		{
 			Skills skills = orders.gameObject.GetComponent<Skills>();
-			skills.CastSkill(orders.UnitOrder.SkillId, orders.UnitOrder.SkillTarget);
+			skills.CastSkill(orders.SkillId, orders.SkillTarget);
 		}
 	}
-	private int GetLongestPathLength(Orders2[] allOrders)
+	private int GetLongestPathLength(Orders[] allOrders)
 	{
 		int maxLength = 0;
-		foreach(Orders2 orders in allOrders )
+		foreach(Orders orders in allOrders )
 		{
-			if(orders.UnitOrder.Path!=null)
-			maxLength = Mathf.Max(maxLength, orders.UnitOrder.Path.Count);
+			if(orders.Path!=null)
+			maxLength = Mathf.Max(maxLength, orders.Path.Count);
 		}
 		return maxLength;
 	}
@@ -50,21 +50,21 @@ public class FightController : MonoBehaviour
 			{
 				for (int j = i + 1; j < AllUnitsOrders.Length;)
 				{
-					if (AllUnitsOrders[i].UnitOrder.Path.Count <= tick || AllUnitsOrders[j].UnitOrder.Path.Count <= tick)
+					if (AllUnitsOrders[i].Path.Count <= tick || AllUnitsOrders[j].Path.Count <= tick)
 					{
 						i++;
 						j++;
 						continue;
 					}
-					if (AllUnitsOrders[i].UnitOrder.Path[tick] == AllUnitsOrders[j].UnitOrder.Path[tick])
+					if (AllUnitsOrders[i].Path[tick] == AllUnitsOrders[j].Path[tick])
 					{
 						if (tick == 0)
 						{
-							AllUnitsOrders[i].UnitOrder.Path.Insert(tick, AllUnitsOrders[i].gameObject.GetComponent<UnitMovement>().currentNode);
+							AllUnitsOrders[i].Path.Insert(tick, AllUnitsOrders[i].gameObject.GetComponent<UnitMovement>().currentNode);
 						}
 						else
 						{
-							AllUnitsOrders[i].UnitOrder.Path.Insert(tick, AllUnitsOrders[i].UnitOrder.Path[tick - 1]);
+							AllUnitsOrders[i].Path.Insert(tick, AllUnitsOrders[i].Path[tick - 1]);
 						}
 					}
 					else

@@ -7,23 +7,36 @@ public class PlanController : MonoBehaviour
 {
 	public GameObject ArrowPrefab;
 	public float arrowYcord = 0.3f;
+
 	private struct UnitAndOrder
 	{
 		public GameObject GO;
-		public Orders2 orders;
+		public Orders orders;
 		public LineRenderer arrow;
 	}
 	private UnitAndOrder[] Units;
 	private UnitAndOrder ActiveUnit;
-    // Start is called before the first frame update
+
+	private int activeSkillId;
+
+    [System.Serializable]
+	public enum Status
+	{
+		Move,
+		Skill
+	}
+	[SerializeField]
+	private Status status;
+
     void Awake()
     {
 		GetUnits();
 		ChangeActiveUnit(Units[0].GO);
 		UpdatePathsVisuals();
+		status = Status.Move;
 	}
 
-    // Update is called once per frame
+    
     void Update()
     {
 		
@@ -39,12 +52,30 @@ public class PlanController : MonoBehaviour
 		{
 			ChangeActiveUnit(Units[2].GO);
 		}
-		if(Input.GetMouseButtonDown(1))
+		switch(status)
 		{
-			MakeNewPath();
+			case Status.Move:
+				ShowMoveRange();
+				if (Input.GetMouseButtonDown(1))
+				{
+					MakeNewPath();
+				}
+				break;
+			case Status.Skill:
+				ShowSkillRange();
+				break;
+			default:
+				Debug.Log("no plan controller status");
+				break;
 		}
+		
 	}
+	
+	public void ChangeStatusToSkill(int skillID)
+	{
+		status = Status.Skill;
 
+	}
 	public void ChangeActiveUnit(GameObject newActiveUnit)
 	{
 		for (int i = 0; i < Units.Length; i++)
@@ -83,7 +114,7 @@ public class PlanController : MonoBehaviour
 		for (int i = 0; i < GOs.Length; i++)
 		{
 			Units[i].GO = GOs[i];
-			Units[i].orders = Units[i].GO.GetComponent<Orders2>();
+			Units[i].orders = Units[i].GO.GetComponent<Orders>();
 			Units[i].arrow = Instantiate(ArrowPrefab,Units[i].GO.transform).GetComponent<LineRenderer>();
 		}
 
@@ -92,14 +123,14 @@ public class PlanController : MonoBehaviour
 	{
 		foreach(UnitAndOrder unit in Units)
 		{
-			Vector3[] newPositions = new Vector3[unit.orders.UnitOrder.Path.Count + 1];
+			Vector3[] newPositions = new Vector3[unit.orders.Path.Count + 1];
 			newPositions[0] = unit.GO.transform.position;
-			for (int i = 1; i <= unit.orders.UnitOrder.Path.Count; i++)
+			for (int i = 1; i <= unit.orders.Path.Count; i++)
 			{
-				Vector3 nextPos = unit.orders.UnitOrder.Path[i - 1].transform.position;
+				Vector3 nextPos = unit.orders.Path[i - 1].transform.position;
 				newPositions[i] = nextPos;
 			}
-			for (int i = 0; i < unit.orders.UnitOrder.Path.Count+1; i++)
+			for (int i = 0; i < unit.orders.Path.Count+1; i++)
 			{
 				newPositions[i].y = arrowYcord;
 			}
@@ -110,5 +141,13 @@ public class PlanController : MonoBehaviour
 		}
 		ActiveUnit.arrow.startWidth = 0.2f;
 		ActiveUnit.arrow.endWidth = 0.2f;
+	}
+	private void ShowMoveRange()
+	{
+		//Debug.Log("If only i knew the nodes in range...");
+	}
+	private void ShowSkillRange()
+	{
+		//Debug.Log("If only i knew the nodes in range...");
 	}
 }
