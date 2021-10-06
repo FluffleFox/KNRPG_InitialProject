@@ -78,16 +78,21 @@ public class PlanController : MonoBehaviour
 	}
 	public void ChangeActiveUnit(GameObject newActiveUnit)
 	{
-		for (int i = 0; i < Units.Length; i++)
-		{
-			if(Units[i].GO == newActiveUnit)
-			{
-				ActiveUnit = Units[i];
-				break;
-			}
-		}
+		ActiveUnit = FindUnitByGO(newActiveUnit);
+		Debug.Log("New active unit is " + ActiveUnit.GO.name);
 		//get all nodes in move range -> mark range
 		//change ui elements
+	}
+	private UnitAndOrder FindUnitByGO(GameObject newActiveUnit)
+	{
+		for (int i = 0; i < Units.Length; i++)
+		{
+			if (Units[i].GO == newActiveUnit)
+			{
+				return Units[i];
+			}
+		}
+		return new UnitAndOrder();
 	}
 	private void MakeNewPath()
 	{
@@ -95,6 +100,7 @@ public class PlanController : MonoBehaviour
 		if (Physics.Raycast(ray, out RaycastHit raycastHit))
 		{
 			ActiveUnit.orders.MakePath(raycastHit.point);
+			UpdatePathsVisuals();
 		}
 	}
 	public void UpdatePathsVisuals()

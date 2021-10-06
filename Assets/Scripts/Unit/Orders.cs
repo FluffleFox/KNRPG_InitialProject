@@ -6,7 +6,6 @@ public class Orders : MonoBehaviour
 {
 	[Header("Connections")]
 	public GraphGrid Grid;
-	public PlanController planController;
 	
 	public List<Node> Path;
 	public int SkillId;
@@ -27,13 +26,12 @@ public class Orders : MonoBehaviour
 			List <Node> path = AstarPathfinding.Instance.FindPath(startNode, targetNode);
 			if(path == null)
 			{
-				Debug.Log("astar nie dziala");
+				Debug.Log("astar nie dziala: (" + currentNode.normalCoordinates.x +","+ currentNode.normalCoordinates.y +") ("+ targetNode.normalCoordinates.x +"," + targetNode.normalCoordinates.y +")");
 				return;
 			}
 			if (path.Count <= gameObject.GetComponent<Stats>().moveRange)
 			{
 				Path = path;
-				planController.UpdatePathsVisuals();
 			}
 			else
 			{

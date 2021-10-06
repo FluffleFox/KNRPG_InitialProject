@@ -7,7 +7,7 @@ public class FightController : MonoBehaviour
 	public GameObject UnitsParent;
 	private Orders[] AllUnitsOrders;
 	
-	public void FightStage()
+	public void FightPhase()
 	{
 		AllUnitsOrders = UnitsParent.GetComponentsInChildren<Orders>();
 		//Debug.Log(AllUnitsOrders.Length);
