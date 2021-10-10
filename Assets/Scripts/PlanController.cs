@@ -7,7 +7,9 @@ public class PlanController : MonoBehaviour
 {
 	public GameObject ArrowPrefab;
 	public float arrowYcord = 0.3f;
-
+	[SerializeField] private Material nodeInRangeMaterial;
+	[SerializeField] private Material normalNodeMaterial;
+	[SerializeField] private Material activeUnitNodeMaterial;
 	private struct UnitAndOrder
 	{
 		public GameObject GO;
@@ -55,7 +57,7 @@ public class PlanController : MonoBehaviour
 		switch(status)
 		{
 			case Status.Move:
-				ShowMoveRange();
+				//ShowMoveRange();
 				if (Input.GetMouseButtonDown(1))
 				{
 					MakeNewPath();
@@ -78,9 +80,11 @@ public class PlanController : MonoBehaviour
 	}
 	public void ChangeActiveUnit(GameObject newActiveUnit)
 	{
+		ShowMoveRange(false, ActiveUnit);
 		ActiveUnit = FindUnitByGO(newActiveUnit);
 		Debug.Log("New active unit is " + ActiveUnit.GO.name);
-		//get all nodes in move range -> mark range
+		ShowMoveRange(true, ActiveUnit);
+		DrawPath();
 		//change ui elements
 	}
 	private UnitAndOrder FindUnitByGO(GameObject newActiveUnit)
@@ -148,12 +152,39 @@ public class PlanController : MonoBehaviour
 		ActiveUnit.arrow.startWidth = 0.2f;
 		ActiveUnit.arrow.endWidth = 0.2f;
 	}
-	private void ShowMoveRange()
+	private void ShowMoveRange(bool show, UnitAndOrder unit)
 	{
-		//Debug.Log("If only i knew the nodes in range...");
+		if (unit.orders == null) return;
+		GraphGrid grid = unit.orders.Grid;
+		List<Node> nodesInRange = grid.GetAllNodesInRange(grid.FindNode(unit.GO.transform.position), unit.GO.GetComponent<Stats>().moveRange);
+		foreach(Node node in nodesInRange)
+		{
+			if(show)
+			{
+				node.gameObject.GetComponent<MeshRenderer>().material = nodeInRangeMaterial;
+			}
+			else
+			{
+				node.gameObject.GetComponent<MeshRenderer>().material = normalNodeMaterial;
+			}
+		}
+		if (show)
+		{
+			Node activeUnitNode = grid.FindNode(unit.GO.transform.position);
+			activeUnitNode.gameObject.GetComponent<MeshRenderer>().material = activeUnitNodeMaterial;
+		}
 	}
 	private void ShowSkillRange()
 	{
 		//Debug.Log("If only i knew the nodes in range...");
+	}
+	public void EndPlanningPhase()
+	{
+
+		ShowMoveRange(false, ActiveUnit);
+		foreach (UnitAndOrder unit in Units)
+		{
+			unit.arrow.positionCount = 0;
+		}
 	}
 }

@@ -22,7 +22,7 @@ public class GraphGrid : MonoBehaviour
     private void Start()
     {
         InitGrid();
-    }
+	}
     public void InitGrid()
     {
         adjacencyMatrix = new List<List<int>>();
@@ -73,7 +73,8 @@ public class GraphGrid : MonoBehaviour
     {
         List<Node> neighbourNodes = new List<Node>();
         int index = node.IndexInGrid;
-        for (int j = 0; j < adjacencyMatrix[index].Count; j++)
+		if (adjacencyMatrix == null) return neighbourNodes;
+		for (int j = 0; j < adjacencyMatrix[index].Count; j++)
         {
             neighbourNodes.Add(transform.GetChild(adjacencyMatrix[index][j]).GetComponent<Node>());
         }
@@ -95,6 +96,41 @@ public class GraphGrid : MonoBehaviour
         }
         return neighbourNodes;
     }
+	struct NodeAndDistance
+	{
+		public NodeAndDistance(Node n, int dist)
+		{
+			node = n;
+			distance = dist;
+		}
+		public Node node;
+		public int distance;
+	}
+	public List<Node> GetAllNodesInRange(Node sourceNode, int range)
+	{
+		List<Node> nodesInRange = new List<Node>();
+		nodesInRange.Add(sourceNode);
+		Queue<NodeAndDistance> bfsQueue = new Queue<NodeAndDistance>();
+		bfsQueue.Enqueue(new NodeAndDistance(sourceNode,0));
+		while(bfsQueue.Count > 0)
+		{
+			NodeAndDistance actualNode = bfsQueue.Dequeue();
+			if(actualNode.distance >= range)
+			{
+				continue;
+			}
+			
+			foreach (Node neighbour in GetNeighbours(actualNode.node))
+			{
+				if(!nodesInRange.Contains(neighbour))
+				{
+					nodesInRange.Add(neighbour);
+					bfsQueue.Enqueue(new NodeAndDistance(neighbour, actualNode.distance + 1));
+				}
+			}
+		}
+		return nodesInRange;
+	}
 
     // for debug graph matrix
     private void PrintMatrix(List<List<int>> matrix)
